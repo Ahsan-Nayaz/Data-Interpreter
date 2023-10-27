@@ -1,0 +1,6 @@
+open-interpreter
+chainlit
+flask
+python-dotenv
+pysqlite3-binary
+waitress
