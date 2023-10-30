@@ -97,6 +97,7 @@ class Interpreter:
         if display:
             validate_llm_settings(self)
 
+
         # Setup the LLM
         if not self._llm:
             self._llm = setup_llm(self)
