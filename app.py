@@ -80,7 +80,7 @@ async def main():
     # Store the chain in the user session
     interpreter.model = "azure/gpt-4-32k-0613"
     interpreter.context_window = 32000
-    interpreter.auto_run = False
+    interpreter.auto_run = True
     interpreter.system_message += """
     Files Available:
                 1. /home/azureuser/data/leeds_dna_v5.csv 
