@@ -132,7 +132,7 @@ async def main(message: str):
     print(message)
     msg = cl.Message(content="")
     for chunk in await llm_chain(message,
-                                 stream=True, uuid=unique_id):
+                                 stream=True, display=False, uuid=unique_id):
         # print(chunk)
         # if 'message' in chunk.keys():
         #     await msg.stream_token(token=chunk['message'])
