@@ -1,5 +1,6 @@
 __import__('pysqlite3')
 import sys
+
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chainlit as cl
 import interpreter
@@ -9,6 +10,7 @@ import time
 import pandas as pd
 import uuid
 from dotenv import load_dotenv
+
 load_dotenv(dotenv_path='venv/.env')
 
 
@@ -78,59 +80,62 @@ async def main():
     # Store the chain in the user session
     interpreter.model = "azure/gpt-4-32k-0613"
     interpreter.context_window = 32000
-    interpreter.auto_run = True
+    interpreter.auto_run = False
+    interpreter.system_message += """
+    Files Available:
+                1. /home/azureuser/data/leeds_dna_v5.csv 
+                2. /home/azureuser/data/dudley.csv
+    Ask the user which file he wants to use, then proceed.
+    You are to perform as a Data Engineer.
+    Use this file and perform the following steps on it. (use python only):
+    1. Data Transformation
+        * Clean the dataframe. Only remove the columns which have no values or is will not be relevant to the prediction. Impute missing values in place of rows.
+        * Also you need to create a "dna" column(which is basically a column referring to whether a patient attended the appointment or not) from the dataframe which might be under a different name, the values should be '0' for whoever attended otherwise whatever values are there, it should be a '1'. If there is already a binary value column for it then just rename it as "dna".
+        * If there is a datetime column, handle it accordingly and also perform datetime split on train and test data. Otherwise just do a normal 80-20 split, be careful to do the split before transformaing the data.
+        * Do not transform the target column to tensors. It should remain in it's data types. Just split it into y_test and y_train.
+        * Also feature engineering if it's needed.
+        * use a column transformer, and then Use helmert encoder for categorical columns, and a min max scaler for numerical columns.
+                cat_transformer = Pipeline(steps=[
+                    ('enc', HelmertEncoder(handle_unknown='return_nan'))])
+                num_transformer = Pipeline(steps=[
+                    ('scaler', MinMaxScaler())])
+                preprocessor = ColumnTransformer(transformers=[('num', num_transformer, numerical_columns),
+                                                               ('cat', cat_transformer, categorical_columns)])
+        * In the end the data should be transformed in such a way that it can be fed into a TENSORFLOW neural network.
+        * In the end there should X_test, X_train, y_train and y_test.
+        You can perform other techniques which you think are necessary.
+    Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
+    Ask the user if he/she has any feature engineering suggestions. 
+    """
+
 
     # Wait for the user to upload a file
-   # file = await cl.AskFileMessage(
+    # file = await cl.AskFileMessage(
     #    content="Please upload a file to begin!", accept={"text/plain": [".csv", ".pdf", ".txt", ".xlsx"]}
-    #).send()
+    # ).send()
     cl.user_session.set("llm_chain", interpreter)
-    #cl.user_session.set("files", file[0])
+    # cl.user_session.set("files", file[0])
     cl.user_session.set("unique_id", unique_id)
-    #create_file(file[0])
-    #await cl.Message(
-     #   content=f"`{file[0].name}` uploaded"
-    #).send()
+    # create_file(file[0])
+    # await cl.Message(
+    #   content=f"`{file[0].name}` uploaded"
+    # ).send()
 
 
 @cl.on_message
 async def main(message: str):
     # Retrieve the chain from the user session
 
-    llm_chain = cl.user_session.get("llm_chain")  # type: LLMChain
+    llm_chain = cl.user_session.get("llm_chain")
     unique_id = cl.user_session.get("unique_id")
- #   file = cl.user_session.get("files")
-#    delete_directory_contents(f"data/{unique_id}/graph/")
+    #   file = cl.user_session.get("files")
+    #    delete_directory_contents(f"data/{unique_id}/graph/")
     llm_chain = cl.make_async(llm_chain.chat)
     # Call the chain asynchronously
     print(message)
     msg = cl.Message(content="")
     for chunk in await llm_chain(
-            f'''Files Available:
-                1. /home/azureuser/data/leeds_dna_v5.csv 
-                2. /home/azureuser/data/dudley.csv
-            Ask the user which file he wants to use, then proceed.
-            You are to perform as a Data Engineer.
-            Use this file and perform the following steps on it. (use python only):
-            1. Data Transformation
-                * Clean the dataframe. Only remove the columns which have no values or is will not be relevant to the prediction. Impute missing values in place of rows.
-                * Also you need to create a "dna" column(which is basically a column referring to whether a patient attended the appointment or not) from the dataframe which might be under a different name, the values should be '0' for whoever attended otherwise whatever values are there, it should be a '1'. If there is already a binary value column for it then just rename it as "dna".
-                * If there is a datetime column, handle it accordingly and also perform datetime split on train and test data. Otherwise just do a normal 80-20 split, be careful to do the split before transformaing the data.
-                * Do not transform the target column to tensors. It should remain in it's data types. Just split it into y_test and y_train.
-                * Also feature engineering if it's needed.
-                * use a column transformer, and then Use helmert encoder for categorical columns, and a min max scaler for numerical columns.
-                        cat_transformer = Pipeline(steps=[
-                            ('enc', HelmertEncoder(handle_unknown='return_nan'))])
-                        num_transformer = Pipeline(steps=[
-                            ('scaler', MinMaxScaler())])
-                        preprocessor = ColumnTransformer(transformers=[('num', num_transformer, numerical_columns),
-                                                                       ('cat', cat_transformer, categorical_columns)])
-                * In the end the data should be transformed in such a way that it can be fed into a TENSORFLOW neural network.
-                * In the end there should X_test, X_train, y_train and y_test.
-                You can perform other techniques which you think are necessary.
-            Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
-            Ask the user if he/she has any feature engineering suggestions. 
-            \n User:''' + message,
+            f'''User:''' + message,
             stream=True):
         # print(chunk)
         # if 'message' in chunk.keys():
@@ -141,25 +146,27 @@ async def main(message: str):
     await msg.send()
 
     # Do any post-processing here
-  #  directory_path = f"data/graph/"
- #   print(directory_path)
+
+
+#  directory_path = f"data/graph/"
+#   print(directory_path)
 #    contents = [item for item in os.listdir(directory_path) if os.path.isfile(os.path.join(directory_path, item))]
-   # print(contents)
-   # if contents:
-    #    print('here')
-        # image = [ cl.Image(name=contents[0], display="inline", path=directory_path + contents[0]) ]
-        # await image.send()
-        # async with aiofiles.open(directory_path + contents[0], "rb") as f:
-        #     image_content = await f.read()
-        #     image2 = cl.Image(name=contents[0], display="inline", content=image_content)
-        #     await image2.send()
-     #   path = directory_path + contents[0]
-      #  elements = [
-       #     cl.Image(name=contents[0], display="inline", path=path)
-       # ]
-       # await cl.Message(content="Here is the graph!", elements=elements).send()
-    # "res" is a Dict. For this chain, we get the response by reading the "text" key.
-    # This varies from chain to chain, you should check which key to read.
+# print(contents)
+# if contents:
+#    print('here')
+# image = [ cl.Image(name=contents[0], display="inline", path=directory_path + contents[0]) ]
+# await image.send()
+# async with aiofiles.open(directory_path + contents[0], "rb") as f:
+#     image_content = await f.read()
+#     image2 = cl.Image(name=contents[0], display="inline", content=image_content)
+#     await image2.send()
+#   path = directory_path + contents[0]
+#  elements = [
+#     cl.Image(name=contents[0], display="inline", path=path)
+# ]
+# await cl.Message(content="Here is the graph!", elements=elements).send()
+# "res" is a Dict. For this chain, we get the response by reading the "text" key.
+# This varies from chain to chain, you should check which key to read.
 
 
 def create_file(file):
