@@ -61,9 +61,9 @@ async def chat_output(msg, chunk):
     # Code
     # if "language" in chunk:
     #     language = chunk['language']
-    # if "code" in chunk:
-    #     if language:
-    #         await cl.Message(content=chunk['code'], language=language).send()
+    if "code" in chunk:
+        if language:
+            await cl.Message(content=chunk['code'], language=language).send()
     # if "executing" in chunk:
     #     await cl.Message(content=chunk['executing']['code'], language=chunk['executing']['language']).send()
     #     # await msg.stream_token(token=str(chunk['executing']))
