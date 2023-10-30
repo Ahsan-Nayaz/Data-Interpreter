@@ -52,10 +52,11 @@ def is_directory_empty(directory_path):
         print(f"An error occurred: {e}")
         return False
 
+
 async def chat_output(msg, chunk):
     language = 'python'
     # if 'message' in chunk.keys():
-    await msg.stream_token(token=str((chunk.values())))
+    await msg.stream_token(token=str([values for values in chunk.values()]))
 
     # Code
     # if "language" in chunk:
