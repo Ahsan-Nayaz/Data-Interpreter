@@ -108,12 +108,12 @@ async def main():
     Ask the user if he/she has any feature engineering suggestions. 
     """
 
-
+    llm_chain = interpreter.chat
     # Wait for the user to upload a file
     # file = await cl.AskFileMessage(
     #    content="Please upload a file to begin!", accept={"text/plain": [".csv", ".pdf", ".txt", ".xlsx"]}
     # ).send()
-    cl.user_session.set("llm_chain", interpreter)
+    cl.user_session.set("llm_chain", llm_chain)
     # cl.user_session.set("files", file[0])
     cl.user_session.set("unique_id", unique_id)
     # create_file(file[0])
@@ -130,7 +130,7 @@ async def main(message: str):
     unique_id = cl.user_session.get("unique_id")
     #   file = cl.user_session.get("files")
     #    delete_directory_contents(f"data/{unique_id}/graph/")
-    llm_chain = cl.make_async(llm_chain.chat)
+    llm_chain = cl.make_async(llm_chain)
     # Call the chain asynchronously
     print(message)
     msg = cl.Message(content="")
