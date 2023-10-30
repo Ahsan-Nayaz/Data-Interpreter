@@ -52,7 +52,6 @@ def is_directory_empty(directory_path):
         print(f"An error occurred: {e}")
         return False
 
-
 async def chat_output(msg, chunk):
     language = 'python'
     # if 'message' in chunk.keys():
