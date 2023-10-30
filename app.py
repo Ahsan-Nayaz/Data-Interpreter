@@ -55,15 +55,12 @@ def is_directory_empty(directory_path):
 
 async def chat_output(msg, chunk):
     language = 'python'
-    if 'message' in chunk.keys():
-        await msg.stream_token(token=chunk['message'])
+    # if 'message' in chunk.keys():
+    await msg.stream_token(token=chunk.values())
 
     # Code
     # if "language" in chunk:
     #     language = chunk['language']
-    if "code" in chunk:
-        if language:
-            await cl.Message(content=chunk['code'], language=language).send()
     # if "executing" in chunk:
     #     await cl.Message(content=chunk['executing']['code'], language=chunk['executing']['language']).send()
     #     # await msg.stream_token(token=str(chunk['executing']))
