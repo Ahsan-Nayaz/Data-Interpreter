@@ -128,14 +128,17 @@ async def main(message: str):
     unique_id = cl.user_session.get("unique_id")
     print(message)
     msg = cl.Message(content="")
-    for chunk in await llm_chain(message,
-                                 stream=True, display=False, uuid=unique_id):
-        # print(chunk)
-        # if 'message' in chunk.keys():
-        #     await msg.stream_token(token=chunk['message'])
-        # time.sleep(0.06)
-        await chat_output(msg, chunk)
+    for chunk in await llm_chain(message, stream=True, display=False, uuid=unique_id):
+        print(chunk)
+        if 'message' in chunk.keys():
+            await msg.stream_token(token=chunk['message'])
         time.sleep(0.06)
+        if 'executing' in chunk.keys():
+            msg.language = chunk["executing"]["language"]
+            await msg.stream_token(token=chunk['code'])
+            msg.language = ''
+        # await chat_output(msg, chunk)
+        # time.sleep(0.06)
     await msg.send()
 
     # Do any post-processing here
