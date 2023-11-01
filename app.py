@@ -135,7 +135,7 @@ async def main(message: str):
         time.sleep(0.06)
         if 'executing' in chunk.keys():
             msg.language = chunk["executing"]["language"]
-            await msg.stream_token(token=chunk['code'])
+            await msg.stream_token(token=chunk["executing"]['code'])
             msg.language = ''
         # await chat_output(msg, chunk)
         # time.sleep(0.06)
