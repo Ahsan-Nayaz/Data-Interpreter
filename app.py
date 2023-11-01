@@ -143,6 +143,7 @@ async def main(message: str):
             code = cl.Message(content="", language='python')
         if 'end_of_execution' in chunk.keys():
             out = cl.Message(content="")
+            msg = cl.Message(content="")
         # if 'end_of_' in chunk.keys():
         #     msg = cl.Message(content="")
         if 'message' in chunk.keys():
