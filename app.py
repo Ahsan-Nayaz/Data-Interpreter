@@ -129,19 +129,23 @@ async def main(message: str):
     print(message)
     msg = cl.Message(content="")
     out = cl.Message(content="")
+    code = cl.Message(content="", language='python')
     for chunk in await llm_chain(message, stream=True, display=False, uuid=unique_id):
         print(chunk)
         if 'end_of_message' in chunk.keys():
             msg = cl.Message(content="")
+        if 'end_of_code' in chunk.keys():
+            code = cl.Message(content="", language='python')
+        if 'end_of_execution' in chunk.keys():
+            out = cl.Message(content="")
         # if 'end_of_' in chunk.keys():
         #     msg = cl.Message(content="")
         if 'message' in chunk.keys():
             await msg.stream_token(token=chunk['message'])
-
-        if 'executing' in chunk.keys():
+        if 'code' in chunk.keys():
             # msg.language = chunk["executing"]["language"]
             # await msg.stream_token(token=chunk["executing"]['code'])
-            await cl.Message(content=chunk["executing"]['code'], language=chunk["executing"]["language"]).send()
+            await code.stream_token(token=chunk['code'])
         if 'output' in chunk.keys():
             await out.stream_token(token=chunk["output"])
         time.sleep(0.06)
