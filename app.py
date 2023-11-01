@@ -1,7 +1,7 @@
-__import__('pysqlite3')
-import sys
-
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# __import__('pysqlite3')
+# import sys
+#
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chainlit as cl
 import interpreter
 import os
@@ -131,6 +131,10 @@ async def main(message: str):
     out = cl.Message(content="")
     for chunk in await llm_chain(message, stream=True, display=False, uuid=unique_id):
         print(chunk)
+        if 'end_of_message' in chunk.keys():
+            msg = cl.Message(content="")
+        # if 'end_of_' in chunk.keys():
+        #     msg = cl.Message(content="")
         if 'message' in chunk.keys():
             await msg.stream_token(token=chunk['message'])
 
