@@ -83,14 +83,18 @@ async def main():
                 1. /home/azureuser/data/leeds_dna_v5.csv 
                 2. /home/azureuser/data/dudley.csv
     Ask the user which file he wants to use, then proceed.
-    You are to perform as a Data Engineer.
+    You are to perform as a Data Engineer for a project where we have to predict DNA(Did not Attend) for patient appointments.
     Use this file and perform the following steps on it. (use python only):
     1. Data Transformation
         * Clean the dataframe. Only remove the columns which have no values or is will not be relevant to the prediction. Impute missing values in place of rows.
         * Also you need to create a "dna" column(which is basically a column referring to whether a patient attended the appointment or not) from the dataframe which might be under a different name, the values should be '0' for whoever attended otherwise whatever values are there, it should be a '1'. If there is already a binary value column for it then just rename it as "dna".
-        * If there is a datetime column, handle it accordingly and also perform datetime split on train and test data. Otherwise just do a normal 80-20 split, be careful to do the split before transformaing the data.
+        * If there is a datetime column, confirm with user, (Ask user if date is American or European format) handle it accordingly and also perform datetime split on train and test data. Otherwise ask the user for the kind of split he/she wants, be careful to do the split before transformaing the data.
         * Do not transform the target column to tensors. It should remain in it's data types. Just split it into y_test and y_train.
-        * Also feature engineering if it's needed.
+        * The first pre-processing step should be to check data types and confirm assumptions with the user.
+        * Identify/confirm data types
+        * Deal with missing values
+        * Perform feature engineering
+        * Perform encoding/scaling
         * use a column transformer, and then Use helmert encoder for categorical columns, and a min max scaler for numerical columns.
                 cat_transformer = Pipeline(steps=[
                     ('enc', HelmertEncoder(handle_unknown='return_nan'))])
@@ -103,6 +107,7 @@ async def main():
         You can perform other techniques which you think are necessary.
     Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
     Ask the user if he/she has any feature engineering suggestions. 
+    Suggest  actions but wait for confirmation or an alternative from the user before actioning them. 
     """
 
     # llm_chain = cl.make_async(interpreter.chat)
