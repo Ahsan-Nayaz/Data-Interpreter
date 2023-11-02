@@ -1,7 +1,4 @@
-from pathlib import Path
 import asyncio
-import logging
-import secrets
 
 __import__('pysqlite3')
 import sys
@@ -10,9 +7,28 @@ sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chainlit as cl
 import interpreter
 from dotenv import load_dotenv
+import logging
+import secrets
+from pathlib import Path
 
 load_dotenv(dotenv_path='venv/.env')
 logging.basicConfig(level=logging.INFO)
+
+"""
+This code defines a function called 'main' that is executed when a chat starts. The function generates a unique ID 
+using the 'secrets' module and ensures that the generated ID is not already stored in the user session. It then logs 
+the generated unique ID.
+
+The code sets the model and context window for an interpreter object. It also reads the contents of a file called 
+'system_message.txt' and adds it to the system message of the interpreter. If the file is not found or if any other 
+exception occurs, appropriate error messages are logged.
+
+The code retrieves the chat function from the interpreter and stores it in a variable called 'llm_chain'. The 
+generated unique ID and 'llm_chain' are then stored in the user session.
+
+Summary: This code sets up a chat functionality by generating a unique ID, configuring the interpreter, and handling 
+system messages. It also stores relevant information in the user session.
+"""
 
 
 @cl.on_chat_start
@@ -40,13 +56,34 @@ async def main():
 
 logger = logging.getLogger(__name__)
 
+"""
+
+This is a function named 'main' which takes a string parameter 'message' and runs on every message. It performs the following tasks:
+1. Checks if the 'message' parameter is a string, otherwise raises a ValueError.
+2. Retrieves values from the user session for 'llm_chain' and 'unique_id'.
+3. Logs the 'message' parameter.
+4. Initializes three instances of the 'cl.Message' class named 'msg', 'out', and 'code'.
+5. Iterates over the chunks returned by the 'llm_chain' function.
+6. Checks for specific keys in each chunk and performs corresponding actions:
+   - If 'end_of_message' key is present, resets the 'msg' instance.
+   - If 'end_of_code' key is present, resets the 'code' instance.
+   - If 'end_of_execution' key is present, resets both 'out' and 'msg' instances.
+   - If 'message' key is present, streams the token to 'msg'.
+   - If 'code' key is present, streams the token to 'code'.
+   - If 'output' key is present, streams the token to 'out'.
+   - Sleeps for 0.06 seconds.
+7. Sends the 'msg', 'out', and 'code' instances.
+8. Handles any exceptions that occur and logs the error.
+
+"""
+
 
 @cl.on_message
 async def main(message: str):
     try:
         if not isinstance(message, str):
             raise ValueError("message parameter must be a string")
-        
+
         llm_chain = cl.user_session.get("llm_chain")
         unique_id = cl.user_session.get("unique_id")
         logger.info(message)
