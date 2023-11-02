@@ -5,7 +5,7 @@ import sys
 
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chainlit as cl
-import interpreter
+
 from dotenv import load_dotenv
 import logging
 import secrets
@@ -34,6 +34,7 @@ system messages. It also stores relevant information in the user session.
 
 @cl.on_chat_start
 async def main():
+    import interpreter
     unique_id = secrets.token_urlsafe(16)
     if interpreter is not None:
         interpreter.reset()
