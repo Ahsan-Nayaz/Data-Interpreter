@@ -1,7 +1,10 @@
-__import__('pysqlite3')
+import asyncio
+import logging
+
+# __import__('pysqlite3')
 import sys
 
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chainlit as cl
 import interpreter
 import os
@@ -107,6 +110,7 @@ async def main():
         You can perform other techniques which you think are necessary.
     Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
     Ask the user if he/she has any feature engineering suggestions. 
+    Before executing any execution 
     Suggest  actions but wait for confirmation or an alternative from the user before actioning them. 
     """
 
@@ -125,18 +129,21 @@ async def main():
     # ).send()
 
 
+logger = logging.getLogger(__name__)
+
+
 @cl.on_message
 async def main(message: str):
     # Retrieve the chain from the user session
 
     llm_chain = cl.user_session.get("llm_chain")
     unique_id = cl.user_session.get("unique_id")
-    print(message)
+    logger.info(message)
     msg = cl.Message(content="")
     out = cl.Message(content="")
     code = cl.Message(content="", language='python')
     for chunk in await llm_chain(message, stream=True, display=False, uuid=unique_id):
-        print(chunk)
+        logger.info(chunk)
         if 'end_of_message' in chunk.keys():
             msg = cl.Message(content="")
         if 'end_of_code' in chunk.keys():
@@ -154,12 +161,13 @@ async def main(message: str):
             await code.stream_token(token=chunk['code'])
         if 'output' in chunk.keys():
             await out.stream_token(token=chunk["output"])
-        time.sleep(0.06)
-            # msg.language = ''
+        await asyncio.sleep(0.06)
+        # msg.language = ''
         # await chat_output(msg, chunk)
-        # time.sleep(0.06)
+        # await asyncio.sleep(0.06)
     await msg.send()
-
+    await out.send()
+    await code.send()
     # Do any post-processing here
 
 
