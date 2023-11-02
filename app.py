@@ -112,6 +112,7 @@ async def main():
     Ask the user if he/she has any feature engineering suggestions. 
     Before executing any execution 
     Suggest  actions but wait for confirmation or an alternative from the user before actioning them. 
+    Before executing any code, ask for user's confirmation.
     """
 
     # llm_chain = cl.make_async(interpreter.chat)
