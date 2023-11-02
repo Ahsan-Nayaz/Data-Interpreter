@@ -13,7 +13,8 @@ from pathlib import Path
 
 load_dotenv(dotenv_path='venv/.env')
 logging.basicConfig(level=logging.INFO)
-
+logger = logging.getLogger(__name__)
+DELAY = 0.06
 """
 This code defines a function called 'main' that is executed when a chat starts. The function generates a unique ID 
 using the 'secrets' module and ensures that the generated ID is not already stored in the user session. It then logs 
@@ -34,9 +35,13 @@ system messages. It also stores relevant information in the user session.
 @cl.on_chat_start
 async def main():
     unique_id = secrets.token_urlsafe(16)
+    if interpreter is not None:
+        interpreter.reset()
+    else:
+        pass
     while cl.user_session.get("unique_id") == unique_id:
         unique_id = secrets.token_urlsafe(16)
-    logging.info(f'Generated unique_id: {unique_id}')
+    logging.debug(f'Generated unique_id: {unique_id}')
 
     interpreter.model = "azure/gpt-4-32k-0613"
     interpreter.context_window = 32000
@@ -54,7 +59,7 @@ async def main():
     cl.user_session.set("unique_id", unique_id)
 
 
-logger = logging.getLogger(__name__)
+
 
 """
 
@@ -81,17 +86,14 @@ This is a function named 'main' which takes a string parameter 'message' and run
 @cl.on_message
 async def main(message: str):
     try:
-        if not isinstance(message, str):
-            raise ValueError("message parameter must be a string")
-
         llm_chain = cl.user_session.get("llm_chain")
         unique_id = cl.user_session.get("unique_id")
-        logger.info(message)
+        logger.info(f'Received message: {message}')
         msg = cl.Message(content="")
         out = cl.Message(content="")
         code = cl.Message(content="", language='python')
         for chunk in await llm_chain(message, stream=True, display=False, uuid=unique_id):
-            logger.info(chunk)
+            logger.info(f'Processing chunk: {chunk}')
             if 'end_of_message' in chunk.keys():
                 msg = cl.Message(content="")
             if 'end_of_code' in chunk.keys():
@@ -105,9 +107,9 @@ async def main(message: str):
                 await code.stream_token(token=chunk['code'])
             if 'output' in chunk.keys():
                 await out.stream_token(token=chunk["output"])
-            await asyncio.sleep(0.06)
+            await asyncio.sleep(DELAY)
         await msg.send()
         await out.send()
         await code.send()
     except Exception as e:
-        logger.error(f"An error occurred: {str(e)}")
+        logger.error(f"An error occurred: {type(e).__name__} - {str(e)}")

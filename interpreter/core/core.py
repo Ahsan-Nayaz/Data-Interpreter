@@ -119,7 +119,7 @@ class Interpreter:
 
             # Save conversation if we've turned conversation_history on
             if self.conversation_history:
-                self.conversation_history_path = str(uuid) + '/' + self.conversation_history_path
+                self.conversation_history_path = 'history/' + str(uuid) + '/' + 'conversations'
 
                 # If it's the first message, set the conversation name
                 if not self.conversation_filename:
