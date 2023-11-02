@@ -5,7 +5,7 @@ import sys
 
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chainlit as cl
-import interpreter
+from interpreter.core.core import Interpreter
 from dotenv import load_dotenv
 import logging
 import secrets
@@ -15,6 +15,8 @@ load_dotenv(dotenv_path='venv/.env')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
 DELAY = 0.06
+
+
 """
 This code defines a function called 'main' that is executed when a chat starts. The function generates a unique ID 
 using the 'secrets' module and ensures that the generated ID is not already stored in the user session. It then logs 
@@ -35,6 +37,7 @@ system messages. It also stores relevant information in the user session.
 @cl.on_chat_start
 async def main():
     unique_id = secrets.token_urlsafe(16)
+    interpreter = Interpreter()
     if interpreter is not None:
         interpreter.reset()
     else:
