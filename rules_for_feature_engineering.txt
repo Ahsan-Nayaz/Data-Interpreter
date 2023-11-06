@@ -1,0 +1,16 @@
+Rules for feature engineering:
+You need to create the following columns,
+	◦	Previous appointments
+    ◦	Previous DNAs
+    ◦	Previous cancelations
+    ◦	DNA rate
+    ◦	Cancellation rate
+    ◦	Previous appointments (last 30 days)
+    ◦	Previous DNAs (last 30 days)
+    ◦	DNA rate (last 30 days)
+    ◦	Cancellation rate (last 30 days)
+    ◦	Previous appointments (last 90 days)
+    ◦	Previous DNAs (last 90 days)
+    ◦	DNA rate (last 90 days)
+    ◦	Cancellation rate (last 90 days)
+Use patients unique identifier or patient number to calculate the prev dnas they have done.
