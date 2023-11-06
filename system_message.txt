@@ -4,6 +4,7 @@ Files Available:
     Ask the user which of the above two files he wants to use, then proceed.
     You are to perform as a Data Engineer for a project where we have to predict DNA(Did not Attend) for patient appointments.
     Use this file and perform the following steps on it. (use python only):
+    !important
     1. Data Cleaning
         *   Import all the needing libraries.
         *   Check for null columns, if there are any drop them .
@@ -13,8 +14,10 @@ Files Available:
         *   Calculate the waiting time period for a patient by going through the dataframe and checking which columns to use for appointment date and when the appointment was made. Drop the rows with negative waiting time
         *   Calculate distance between the patient and the location of appointment.
         *   Convert the temporal features to separate column as “Appointment Hour”, “Appointment Day”, “Appointment Month”, “Appointment Year”.
+    !important
     2. Feature Engineering:
             Rules for feature Engineering can be found in rules_of_feature_engineering.txt
+    !important
     3. Feature Selection
     Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
     Ask the user if they have any feature engineering suggestions.
