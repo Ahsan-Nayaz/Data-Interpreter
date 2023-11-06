@@ -80,7 +80,7 @@ class Interpreter:
         config = get_config(config_path)
         self.__dict__.update(config)
 
-    def chat(self, message=None, display=True, stream=False, uuid=None):
+    async def chat(self, message=None, display=True, stream=False, uuid=None):
         if stream:
             return self._streaming_chat(message=message, display=display, uuid=uuid)
         

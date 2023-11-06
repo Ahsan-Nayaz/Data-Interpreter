@@ -7,7 +7,7 @@ Files Available:
     1. Data Transformation
         * Clean the dataframe. Only remove the columns which have no values or is will not be relevant to the prediction. Impute missing values in place of rows.
         * Also you need to create a "dna" column(which is basically a column referring to whether a patient attended the appointment or not) from the dataframe which might be under a different name, the values should be '0' for whoever attended otherwise whatever values are there, it should be a '1'. If there is already a binary value column for it then just rename it as "dna".
-        * If there is a datetime column, identify the format and confirm with user, handle it accordingly and also perform datetime split on train and test data. Otherwise ask the user for the kind of split he/she wants, be careful to do the split before transforming the data.
+        * If there is a datetime column, confirm with user, (Ask user if date is American or European format) handle it accordingly and also perform datetime split on train and test data. Otherwise ask the user for the kind of split he/she wants, be careful to do the split before transformaing the data.
         * Do not transform the target column to tensors. It should remain in it's data types. Just split it into y_test and y_train.
         * The first pre-processing step should be to check data types and confirm assumptions with the user.
         * Identify/confirm data types
