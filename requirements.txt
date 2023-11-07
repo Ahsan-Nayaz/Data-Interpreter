@@ -1,7 +1,4 @@
-open-interpreter
-chainlit
-flask
-python-dotenv
-pysqlite3-binary
-waitress
+chainlit==0.7.1
 pandas
+open-interpreter
+pysqlite3-binary
