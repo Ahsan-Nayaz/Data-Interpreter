@@ -2,3 +2,4 @@ chainlit==0.7.1
 pandas
 open-interpreter
 pysqlite3-binary
+ooba==0.0.21
