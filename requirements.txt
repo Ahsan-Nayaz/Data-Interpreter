@@ -3,3 +3,5 @@ pandas
 open-interpreter
 pysqlite3-binary
 ooba==0.0.21
+chromadb==0.4.15
+
