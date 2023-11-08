@@ -49,7 +49,7 @@ async def main():
     interpreter.model = "azure/gpt-4-32k-0613"
     interpreter.context_window = 32000
 
-    file_path = Path('system_message.txt')
+    file_path = Path('prompts/system_message.txt')
     try:
         interpreter.system_message += file_path.read_text()
     except FileNotFoundError:

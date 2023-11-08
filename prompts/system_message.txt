@@ -16,7 +16,7 @@ Files Available:
         -   Convert the temporal features to separate column as "Appointment Hour", "Appointment Day", "Appointment Month", "Appointment Year".
     !important
     2. Feature Engineering:
-            **Rules for feature Engineering can be found in rules_of_feature_engineering.txt**
+            **Rules for feature Engineering can be found in prompts/rules_of_feature_engineering.txt**
     !important
     3. Feature Selection
     Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
