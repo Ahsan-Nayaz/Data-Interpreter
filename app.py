@@ -35,7 +35,7 @@ system messages. It also stores relevant information in the user session.
 
 
 @cl.on_chat_start
-async def main():
+async def start():
     unique_id = secrets.token_urlsafe(16)
     interpreter = Interpreter()
     if interpreter is not None:
@@ -87,7 +87,7 @@ This is a function named 'main' which takes a string parameter 'message' and run
 
 
 @cl.on_message
-async def main(message: str):
+async def on_message(message: str):
     try:
         llm_chain = cl.user_session.get("llm_chain")
         unique_id = cl.user_session.get("unique_id")
