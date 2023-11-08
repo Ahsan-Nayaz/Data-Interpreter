@@ -15,7 +15,7 @@ blessed==1.20.0
 blinker==1.7.0
 cachetools==5.3.2
 certifi==2023.7.22
-chainlit==0.7.400
+chainlit==0.7.1
 charset-normalizer==3.3.2
 chroma-hnswlib==0.7.3
 chromadb==0.4.16
