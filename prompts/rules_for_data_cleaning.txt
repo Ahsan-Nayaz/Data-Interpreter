@@ -1,5 +1,6 @@
--   Import all the needing libraries.
--   Check for null columns, if there are any drop them .
+-   Import all the necessary libraries.
+-   Check for null columns, if there are any, drop them .
+-   Check for any index columns, if there are any, drop them.
 -   Check for null values in the columns, if there is a categorical variable like "Ethnicity" which can imputed with backward and forward filling using some unique identifier then do that or you can go through unique values and if there is a category in the column such as "unknown" or "other" then impute that. And drop the rows from the columns with very less number of null values.
 -   Check the data frame for columns which might not help in prediction of "did not attend", drop them after confirming with user.
 -   Create a ‘dna’ boolean column and ‘cnd’ column. 'dna' is for did not attend and 'cnd' is for cancelled.
