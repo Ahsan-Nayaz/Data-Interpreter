@@ -1,0 +1,37 @@
+General approach to feature selection
+Because we have a large dataset, Recursive Feature Elimination (RFE) will likely be extremely slow or possibly time out with memory errors.
+We can use "filter-based" feature selection methods as a first step to reduce the feature space and avoid this:
+    Chi-squared
+    T-Test
+    Mutual information
+These are much less computationally expensive methods and we can apply RFE to the reduced feature space afterwards.
+Filter-based feature selection steps:
+    Ensure that the correct datatypes are in place for all columns
+    Split into test and train sets using a time-series based split (aim for around 80/20 split)
+    Separate into X and y sets
+    Perform filter based feature selection on the train set only, using different approaches for categorical and numerical features:
+    Categorical features (chi-squared).
+        See section 4.0 of the notebook above.
+        Encode categorical columns using One Hot Encoding
+        Perform a chi-squared test between the encoded features and y_train
+        Select only those features with a p-value <= 0.05
+    Numerical features (t-test):
+        Perform t-tests between the numerical features and y_train.
+    NOTE: Make sure you exclude any of the binary encoded categorical features from this analysis.
+    Select only those features with a p-value <= 0.05
+    Combine the remaining features to produce a new feature set.
+    Perform further feature selection on the new feature set.
+    Mutual information:
+        The new feature set can be passed to a Mutual Information (MI) classifier as an additional feature selection step.
+        This will take longer than chi-squared a t-testing however, so can be skipped if you don't have much time.
+        To determine the optimal number of features using MI, you should plot the features' MI scores and choose the subset above the "elbow" of the plot. Code to do this exists in the notebook.
+        Choose the subset of features above the elbow and take into the next step.
+Wrapper based feature selection (RFE):
+Use Recursive Feature Elimination with cross validation (RFECV):
+    RFE with cross validation:
+        As mentioned this will be slow, so you may want to do a couple of things:
+            Reduce the number of estimators (n_estimator) to 50.
+            Reduce the time series splits (n_splits) to 3 or 4
+        Increase the number of feature steps to take (step) to 5 or 6
+        Again you will need to select the features that are above the elbow when plotted according to feature importance.
+        Select the subset of features above the elbow and save as the final feature set.
