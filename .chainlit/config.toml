@@ -6,7 +6,7 @@ enable_telemetry = true
 user_env = []
 
 # Duration (in seconds) during which the session is saved when the connection is lost
-session_timeout = 3600
+session_timeout = 9999999
 
 # Enable third parties caching (e.g LangChain cache)
 cache = false
