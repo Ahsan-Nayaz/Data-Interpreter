@@ -14,7 +14,7 @@ from pathlib import Path
 load_dotenv(dotenv_path='venv/.env')
 logging.basicConfig(level=logging.INFO)
 logger = logging.getLogger(__name__)
-DELAY = 0.06
+DELAY = 0.04
 
 
 @cl.on_chat_start
