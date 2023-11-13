@@ -17,25 +17,17 @@ logger = logging.getLogger(__name__)
 DELAY = 0.06
 
 
-"""
-This code defines a function called 'main' that is executed when a chat starts. The function generates a unique ID 
-using the 'secrets' module and ensures that the generated ID is not already stored in the user session. It then logs 
-the generated unique ID.
-
-The code sets the model and context window for an interpreter object. It also reads the contents of a file called 
-'system_message.txt' and adds it to the system message of the interpreter. If the file is not found or if any other 
-exception occurs, appropriate error messages are logged.
-
-The code retrieves the chat function from the interpreter and stores it in a variable called 'llm_chain'. The 
-generated unique ID and 'llm_chain' are then stored in the user session.
-
-Summary: This code sets up a chat functionality by generating a unique ID, configuring the interpreter, and handling 
-system messages. It also stores relevant information in the user session.
-"""
-
-
 @cl.on_chat_start
 async def start():
+    """
+    Start the chat by generating a unique ID and initializing the interpreter.
+    If the interpreter is not None, reset it. Otherwise, do nothing.
+    Generate a new unique ID if the current unique ID in the user session is the same as the generated one.
+    Set the model and context window for the interpreter.
+    Read the content of the 'system_message.txt' file and append it to the system message in the interpreter.
+    Create an async chain for the interpreter's chat function and store it in the user session.
+    Store the unique ID in the user session.
+    """
     unique_id = secrets.token_urlsafe(16)
     interpreter = Interpreter()
     if interpreter is not None:
@@ -62,32 +54,23 @@ async def start():
     cl.user_session.set("unique_id", unique_id)
 
 
-
-
-"""
-
-This is a function named 'main' which takes a string parameter 'message' and runs on every message. It performs the following tasks:
-1. Checks if the 'message' parameter is a string, otherwise raises a ValueError.
-2. Retrieves values from the user session for 'llm_chain' and 'unique_id'.
-3. Logs the 'message' parameter.
-4. Initializes three instances of the 'cl.Message' class named 'msg', 'out', and 'code'.
-5. Iterates over the chunks returned by the 'llm_chain' function.
-6. Checks for specific keys in each chunk and performs corresponding actions:
-   - If 'end_of_message' key is present, resets the 'msg' instance.
-   - If 'end_of_code' key is present, resets the 'code' instance.
-   - If 'end_of_execution' key is present, resets both 'out' and 'msg' instances.
-   - If 'message' key is present, streams the token to 'msg'.
-   - If 'code' key is present, streams the token to 'code'.
-   - If 'output' key is present, streams the token to 'out'.
-   - Sleeps for 0.06 seconds.
-7. Sends the 'msg', 'out', and 'code' instances.
-8. Handles any exceptions that occur and logs the error.
-
-"""
-
-
 @cl.on_message
 async def on_message(message: str):
+    """
+    This function is the event handler for incoming messages. It takes in a message as a parameter and processes it
+    using the LLM chain. The function retrieves the LLM chain and unique ID from the user session. It initializes
+    empty messages, code, and output objects. It then iterates through the chunks of the LLM chain, processing each
+    chunk accordingly. If a chunk indicates the end of a message, code, or execution, the corresponding objects are
+    reset. If a chunk contains a message, code, or output, it is streamed to the respective objects. After each
+    chunk, the function sleeps for a specified delay. Finally, the function sends the processed messages, code,
+    and output. If an error occurs during the execution of the function, it is logged.
+
+    Parameters:
+    - message (str): The incoming message to be processed.
+
+    Returns:
+    - None
+    """
     try:
         llm_chain = cl.user_session.get("llm_chain")
         unique_id = cl.user_session.get("unique_id")

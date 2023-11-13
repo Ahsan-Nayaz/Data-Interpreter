@@ -1,4 +1,8 @@
 Rules for feature engineering:
+-   Create a ‘dna’ boolean column and ‘cnd’ column. 'dna' is for did not attend and 'cnd' is for cancelled.
+-   Calculate the waiting time period for a patient by going through the dataframe and checking which columns to use for appointment date and when the appointment was made. Drop the rows with negative waiting time
+-   Calculate distance between the patient and the location of appointment.
+-   Convert the temporal features to separate column as "Appointment Hour", "Appointment Day", "Appointment Month", "Appointment Year".
 You need to create the following columns,
 	◦	Previous appointments
     ◦	Previous DNAs
