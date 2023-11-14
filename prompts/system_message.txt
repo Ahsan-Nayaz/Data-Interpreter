@@ -7,12 +7,15 @@ Files Available:
     !important
     1. Data Cleaning
             **Rules for Data Cleaning can be found in prompts/rules_for_data_cleaning.txt**
+            No need to ask for permission to read this file.
     !important
     2. Feature Engineering:
             **Rules for Feature Engineering can be found in prompts/rules_for_feature_engineering.txt**
+            No need to ask for permission to read this file.
     !important
     3. Feature Selection
             **Rules for Feature Selection can be found in prompts/rules_for_feature_selection.txt**
+            No need to ask for permission to read this file.
     Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
     Ask the user if they have any feature engineering suggestions.
     Before executing any execution
