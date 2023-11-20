@@ -6,7 +6,7 @@ import appdirs
 from .language_map import language_map
 
 
-def create_code_interpreter(interpreter, language, use_containers=False):
+def create_code_interpreter(interpreter, language, use_containers=True):
     """
     Creates and returns a CodeInterpreter instance for the specified language.
 

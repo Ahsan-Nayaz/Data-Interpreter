@@ -118,7 +118,7 @@ def respond(interpreter):
                                                                                            use_containers=True)
                     else:
                         interpreter._code_interpreters[language] = create_code_interpreter(interpreter, language,
-                                                                                           use_containers=False)
+                                                                                           use_containers=True)
 
                 code_interpreter = interpreter._code_interpreters[language]
 

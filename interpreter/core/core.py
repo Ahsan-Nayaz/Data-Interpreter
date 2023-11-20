@@ -184,3 +184,6 @@ class Interpreter:
 
     def get_relevant_procedures_string(self):
         return get_relevant_procedures_string(self)
+
+    def container_callback(self, language: str) -> None:
+        self._code_interpreters.pop(language)
