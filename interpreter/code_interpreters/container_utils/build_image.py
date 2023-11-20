@@ -17,7 +17,7 @@ def get_files_hash(*file_paths):
 
 
 def build_docker_images(
-    dockerfile_dir = 'interpreter/code_interpreters/dockerfiles/'
+    dockerfile_dir = os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "dockerfiles")
 
 ):
     """
