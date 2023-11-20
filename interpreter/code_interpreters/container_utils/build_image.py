@@ -17,8 +17,8 @@ def get_files_hash(*file_paths):
 
 
 def build_docker_images(
-    dockerfile_dir = os.path.join(os.path.abspath(os.path.dirname(os.path.dirname(__file__))), "dockerfiles")
-,
+    dockerfile_dir = 'interpreter/code_interpreters/dockerfiles/'
+
 ):
     """
     Builds a Docker image for the Open Interpreter runtime container if needed.
@@ -51,6 +51,8 @@ def build_docker_images(
         raise RuntimeError(
             "No container Dockerfiles or requirements.txt found. Make sure they are in the dockerfiles/ subdir of the module."
         )
+    else:
+        print("Dockerfile and requirements.txt found.")
 
     current_hash = get_files_hash(dockerfile_path, requirements_path)
 

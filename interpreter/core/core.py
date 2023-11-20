@@ -74,7 +74,7 @@ class Interpreter:
         self.num_procedures = 2
 
         # Container options
-        self.use_containers = False
+        self.use_containers = True
         self.session_id = None
 
         # Load config defaults
@@ -98,6 +98,7 @@ class Interpreter:
         List[Dict[str, Any]], None]:
 
         if self.use_containers:
+            print('here')
             build_docker_images()  # Build images if needed. does nothing if already built
 
         if stream:
