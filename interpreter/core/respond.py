@@ -5,6 +5,7 @@ from ..utils.truncate_output import truncate_output
 import traceback
 import litellm
 
+
 def respond(interpreter):
     """
     Yields tokens, but also adds them to interpreter.messages. TBH probably would be good to seperate those two responsibilities someday soon
@@ -26,7 +27,6 @@ def respond(interpreter):
         for message in messages_for_llm:
             if "output" in message and message["output"] == "":
                 message["output"] = "No output"
-
 
         ### RUN THE LLM ###
 
@@ -73,7 +73,7 @@ def respond(interpreter):
                 yield {"end_of_message": True}
             elif chunk_type == "code":
                 yield {"end_of_code": True}
-            
+
         except litellm.exceptions.BudgetExceededError:
             display_markdown_message(f"""> Max budget exceeded
 
@@ -88,16 +88,15 @@ def respond(interpreter):
         except Exception as e:
             if 'auth' in str(e).lower() or 'api key' in str(e).lower():
                 output = traceback.format_exc()
-                raise Exception(f"{output}\n\nThere might be an issue with your API key(s).\n\nTo reset your API key (we'll use OPENAI_API_KEY for this example, but you may need to reset your ANTHROPIC_API_KEY, HUGGINGFACE_API_KEY, etc):\n        Mac/Linux: 'export OPENAI_API_KEY=your-key-here',\n        Windows: 'setx OPENAI_API_KEY your-key-here' then restart terminal.\n\n")
+                raise Exception(
+                    f"{output}\n\nThere might be an issue with your API key(s).\n\nTo reset your API key (we'll use OPENAI_API_KEY for this example, but you may need to reset your ANTHROPIC_API_KEY, HUGGINGFACE_API_KEY, etc):\n        Mac/Linux: 'export OPENAI_API_KEY=your-key-here',\n        Windows: 'setx OPENAI_API_KEY your-key-here' then restart terminal.\n\n")
             else:
                 raise
-        
-        
-        
+
         ### RUN CODE (if it's there) ###
 
         if "code" in interpreter.messages[-1]:
-            
+
             if interpreter.debug_mode:
                 print("Running code:", interpreter.messages[-1])
 
@@ -114,7 +113,13 @@ def respond(interpreter):
                 # Get a code interpreter to run it
                 language = interpreter.messages[-1]["language"]
                 if language not in interpreter._code_interpreters:
-                    interpreter._code_interpreters[language] = create_code_interpreter(language)
+                    if interpreter.use_containers:
+                        interpreter._code_interpreters[language] = create_code_interpreter(interpreter, language,
+                                                                                           use_containers=True)
+                    else:
+                        interpreter._code_interpreters[language] = create_code_interpreter(interpreter, language,
+                                                                                           use_containers=False)
+
                 code_interpreter = interpreter._code_interpreters[language]
 
                 # Yield a message, such that the user can stop code execution if they want to
@@ -127,7 +132,13 @@ def respond(interpreter):
 
                 # Yield each line, also append it to last messages' output
                 interpreter.messages[-1]["output"] = ""
-                for line in code_interpreter.run(code):
+
+                code_to_run = code
+
+                if not code_to_run.endswith("\n"):
+                    code_to_run += "\n"
+
+                for line in code_interpreter.run(code_to_run):
                     yield line
                     if "output" in line:
                         output = interpreter.messages[-1]["output"]

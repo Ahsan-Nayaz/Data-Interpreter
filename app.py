@@ -1,9 +1,9 @@
 import asyncio
 
-__import__('pysqlite3')
-import sys
-
-sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
+# __import__('pysqlite3')
+# import sys
+#
+# sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chainlit as cl
 from interpreter.core.core import Interpreter
 from dotenv import load_dotenv
@@ -43,7 +43,7 @@ async def start():
 
     file_path = Path('prompts/system_message.txt')
     try:
-        interpreter.system_message += file_path.read_text()
+        interpreter.system_message += file_path.read_text().replace('{download}', f'history/{unique_id}/conversations/downloads')
     except FileNotFoundError:
         logging.error("File not found: system_message.txt")
     except Exception as e:

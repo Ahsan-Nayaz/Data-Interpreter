@@ -26,12 +26,3 @@ Filter-based feature selection steps:
         This will take longer than chi-squared a t-testing however, so can be skipped if you don't have much time.
         To determine the optimal number of features using MI, you should plot the features' MI scores and choose the subset above the "elbow" of the plot. Code to do this exists in the notebook.
         Choose the subset of features above the elbow and take into the next step.
-Wrapper based feature selection (RFE):
-Use Recursive Feature Elimination with cross validation (RFECV):
-    RFE with cross validation:
-        As mentioned this will be slow, so you may want to do a couple of things:
-            Reduce the number of estimators (n_estimator) to 50.
-            Reduce the time series splits (n_splits) to 3 or 4
-        Increase the number of feature steps to take (step) to 5 or 6
-        Again you will need to select the features that are above the elbow when plotted according to feature importance.
-        Select the subset of features above the elbow and save as the final feature set.
