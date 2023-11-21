@@ -106,7 +106,7 @@ RUN echo '{}' > /tmp/package.json
 #Blobfuse
 #RUN sudo apt-get install git -y
 #RUN git clone https://github.com/Azure/azure-storage-fuse/
-#RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnutls28-dev uuid-dev libgcrypt20-dev libboost-all-dev gcc g++ -y
+RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnutls28-dev uuid-dev libgcrypt20-dev libboost-all-dev gcc g++ -y
 ##RUN cd azure-storage-fuse
 #RUN chmod 755 azure-storage-fuse/build.sh
 #RUN sh azure-storage-fuse/build.sh
