@@ -6,15 +6,15 @@ ENV DEBIAN_FRONTEND=noninteractive
 
 # Create user with sudo only in the container for security.
 RUN useradd docker && echo "docker:docker" | chpasswd && mkdir -p /home/docker && chown docker:docker /home/docker
-RUN mkdir -p /mnt/data && chown -R docker:docker /mnt/data
-RUN mkdir /data/ && chown -R docker:docker /data/
+RUN mkdir -p /mnt/workspace && chown -R docker:docker /mnt/workspace
+RUN mkdir -p /mnt/data/ && chown -R docker:docker /mnt/data/
 RUN apt-get update && apt-get install -y sudo
 
 RUN usermod -aG sudo docker
 
 RUN echo "docker ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 # add write perms for user 'docker' in the correct dirs ( where it cant mess things up much. it does have passwordless sudo, so it can override this if it figures out it has sudo.)
-RUN chown -R docker:docker /mnt/data
+RUN chown -R docker:docker /mnt/workspace
 
 # Update package list and install essential utilities and runtimes
 RUN sudo apt-get update && apt-get install -y \
@@ -75,4 +75,4 @@ RUN awk '/\[r\]/,/^\s*$/' /tmp/requirements.txt | grep -v '^\[r\]' > /tmp/r_requ
 RUN rm /tmp/package.json /tmp/node_requirements.txt /tmp/python_requirements.txt /tmp/r_requirements.txt
 
 # workdir set. pray it dosent try to go exploring.
-WORKDIR /mnt/data
+WORKDIR /mnt/
