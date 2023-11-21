@@ -1,5 +1,5 @@
 # Base image
-FROM ubuntu:18.04
+FROM ubuntu:20.04
 
 # fix locales
 RUN apt-get update \
@@ -12,7 +12,7 @@ ENV LANG en_US.utf8
 ENV DEBIAN_FRONTEND=noninteractive
 RUN apt-get update \
     && apt-get install -y wget apt-utils \
-    && wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && apt-get remove -y wget \
     && apt-get update \
@@ -23,7 +23,7 @@ RUN mkdir /blobfusetmp/
 RUN mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 COPY connection.cfg /config/
 RUN mkdir /data/
-RUN blobfuse /data/ --tmp-path=/blobfusetmp/ --basic-remount-check=true --use-https=true --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
+RUN blobfuse /data/ --tmp-path=/blobfusetmp/ --use-https=true --config-file=/config/connection.cfg -o allow_other
 
 # Create user with sudo only in the container for security.
 RUN useradd docker && echo "docker:docker" | chpasswd && mkdir -p /home/docker && chown docker:docker /home/docker
