@@ -214,7 +214,7 @@ class DockerProcWrapper:
                 stdin=True,
                 stdout=True,
                 stderr=True,
-                workdir="/mnt/data",
+                workdir="/mnt/workspace",
                 user="docker",
                 tty=False
 
