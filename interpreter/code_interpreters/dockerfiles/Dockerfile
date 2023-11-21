@@ -75,4 +75,4 @@ RUN awk '/\[r\]/,/^\s*$/' /tmp/requirements.txt | grep -v '^\[r\]' > /tmp/r_requ
 RUN rm /tmp/package.json /tmp/node_requirements.txt /tmp/python_requirements.txt /tmp/r_requirements.txt
 
 # workdir set. pray it dosent try to go exploring.
-WORKDIR /mnt/
+WORKDIR /mnt/workspace
