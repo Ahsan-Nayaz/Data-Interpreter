@@ -113,12 +113,14 @@ RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnu
 RUN apt-get update \
     && apt-get install -y wget apt-utils \
     && wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb
-RUN sudo apt-get update
-RUN sudo apt-get install blobfuse fuse -y
+    && dpkg -i packages-microsoft-prod.deb \
+    && apt-get remove -y wget \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
+    && rm -rf /var/lib/apt/lists/*
 RUN sudo mkdir /blobfusetmp/
 RUN sudo chown docker /blobfusetmp/
-#RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
+RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 COPY connection.cfg /config/
 RUN sudo mkdir /data/
 RUN sudo blobfuse /data/ --tmp-path=/blobfusetmp/ --basic-remount-check=true --use-https=true --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
