@@ -127,7 +127,7 @@ class DockerStreamWrapper:
 #    courtesy of the integration with the `atexit` module, safeguarding system resources from being unnecessarily occupied.
 @access_aware 
 class DockerProcWrapper:
-    def __init__(self, command, session_id, auto_remove_timeout=None, close_callback=None, mount=False): ## Mounting isnt implemented in main code, but i did it here prior so we just hide it behind a flag for now.
+    def __init__(self, command, session_id, auto_remove_timeout=None, close_callback=None, mount=True): ## Mounting isnt implemented in main code, but i did it here prior so we just hide it behind a flag for now.
         
         # Docker stuff
         client_kwargs = kwargs_from_env()
