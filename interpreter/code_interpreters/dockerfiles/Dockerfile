@@ -116,12 +116,12 @@ RUN apt-get update \
     && dpkg -i packages-microsoft-prod.deb
 RUN sudo apt-get update
 RUN sudo apt-get install blobfuse fuse -y
-RUN sudo mkdir /azure/blobfusetmp
+RUN sudo mkdir /blobfusetmp/
 #RUN sudo chown docker /mnt/blobfusetmp
 RUN sudo mount -t tmpfs -o size=16g tmpfs /mnt/blobfusetmp
 COPY connection.cfg /config/
 RUN sudo mkdir /data/
-RUN sudo blobfuse /data/ --tmp-path=/azure/blobfusetmp  --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
+RUN sudo blobfuse /data/ --tmp-path=/blobfusetmp/  --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
 
 # workdir set. pray it dosent try to go exploring.
 WORKDIR /mnt/data
