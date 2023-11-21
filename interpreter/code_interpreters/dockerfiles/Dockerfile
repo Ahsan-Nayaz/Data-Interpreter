@@ -118,7 +118,7 @@ RUN sudo apt-get update
 RUN sudo apt-get install blobfuse fuse -y
 RUN sudo mkdir /blobfusetmp/
 RUN sudo chown docker /blobfusetmp/
-RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
+#RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 COPY connection.cfg /config/
 RUN sudo mkdir /data/
 RUN sudo blobfuse /data/ --tmp-path=/blobfusetmp/  --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
