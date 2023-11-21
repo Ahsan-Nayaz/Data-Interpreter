@@ -121,7 +121,7 @@ RUN sudo chown docker /blobfusetmp/
 #RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 COPY connection.cfg /config/
 RUN sudo mkdir /data/
-RUN sudo blobfuse /data/ --tmp-path=/blobfusetmp/  --use-https=true --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
+RUN sudo blobfuse /data/ --tmp-path=/blobfusetmp/ --basic-remount-check=true --use-https=true --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
 
 # workdir set. pray it dosent try to go exploring.
 WORKDIR /mnt/data
