@@ -3,6 +3,7 @@ numpy
 pandas
 matplotlib
 beautifulsoup4
+dask
 
 [r]
 
