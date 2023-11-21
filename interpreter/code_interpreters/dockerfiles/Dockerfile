@@ -24,23 +24,23 @@ RUN echo "docker ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 RUN chown -R docker:docker /mnt/data
 
 # install blobfuse
-RUN #sudo dpkg --add-architecture amd64
-RUN sudo apt-get update \
-    && sudo apt-get install -y wget apt-utils \
-    && sudo wget packages.microsoft.com/ubuntu/18.04/prod/pool/main/b/blobfuse/blobfuse-1.1.1-bionic.deb   \
-    && sudo dpkg -i blobfuse-1.1.1-bionic.deb  \
-    && sudo apt-get remove -y wget \
-    && sudo apt-get update \
-    && sudo apt-get install -y --no-install-recommends libcurl3-gnutls libgnutls30 \
-    && sudo rm -rf /var/lib/apt/lists/*
-RUN sudo apt-get update
-#RUN sudo apt-get install blobfuse fuse -y
-RUN sudo mkdir /mnt/blobfusetmp
-RUN sudo chown docker /mnt/blobfusetmp
-RUN sudo mount -t tmpfs -o size=16g tmpfs /mnt/blobfusetmp
-COPY connection.cfg /config/
-RUN sudo mkdir /data/
-RUN sudo blobfuse /data/ --tmp-path=/mnt/blobfusetmp  --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
+#RUN #sudo dpkg --add-architecture amd64
+#RUN sudo apt-get update \
+#    && sudo apt-get install -y wget apt-utils \
+#    && sudo wget packages.microsoft.com/ubuntu/18.04/prod/pool/main/b/blobfuse/blobfuse-1.1.1-bionic.deb   \
+#    && sudo dpkg -i blobfuse-1.1.1-bionic.deb  \
+#    && sudo apt-get remove -y wget \
+#    && sudo apt-get update \
+#    && sudo apt-get install -y --no-install-recommends libcurl3-gnutls libgnutls30 \
+#    && sudo rm -rf /var/lib/apt/lists/*
+#RUN sudo apt-get update
+##RUN sudo apt-get install blobfuse fuse -y
+#RUN sudo mkdir /mnt/blobfusetmp
+#RUN sudo chown docker /mnt/blobfusetmp
+#RUN sudo mount -t tmpfs -o size=16g tmpfs /mnt/blobfusetmp
+#COPY connection.cfg /config/
+#RUN sudo mkdir /data/
+#RUN sudo blobfuse /data/ --tmp-path=/mnt/blobfusetmp  --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
 
 RUN sudo apt-get install aptitude -y
 # Update package list and install essential utilities and runtimes
@@ -104,14 +104,23 @@ RUN echo '{}' > /tmp/package.json
 #RUN rm /tmp/package.json /tmp/node_requirements.txt /tmp/python_requirements.txt /tmp/r_requirements.txt
 
 #Blobfuse
-#RUN sudo apt-get install git -y
-#RUN git clone https://github.com/Azure/azure-storage-fuse/
-#RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnutls28-dev uuid-dev libgcrypt20-dev libboost-all-dev gcc g++ -y
-##RUN cd azure-storage-fuse
-#RUN chmod 755 azure-storage-fuse/build.sh
-#RUN sh azure-storage-fuse/build.sh
-#RUN curl -sSL -O https://packages.microsoft.com/debian/10/prod/pool/main/b/blobfuse/blobfuse-1.4.5-Debian10.0-x86_64.deb
-#RUN sudo dpkg -i blobfuse-1.4.5-Debian10.0-x86_64.deb
-#RUN rm packages-microsoft-prod.deb
+RUN sudo apt-get install git -y
+RUN git clone https://github.com/Azure/azure-storage-fuse/
+RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnutls28-dev uuid-dev libgcrypt20-dev libboost-all-dev gcc g++ -y
+#RUN cd azure-storage-fuse
+RUN chmod 755 azure-storage-fuse/build.sh
+RUN sh azure-storage-fuse/build.sh
+RUN curl -sSL -O https://packages.microsoft.com/debian/10/prod/pool/main/b/blobfuse/blobfuse-1.4.5-Debian10.0-x86_64.deb
+RUN sudo dpkg -i blobfuse-1.4.5-Debian10.0-x86_64.deb
+RUN rm packages-microsoft-prod.deb
+RUN sudo apt-get update
+#RUN sudo apt-get install blobfuse fuse -y
+RUN sudo mkdir /mnt/blobfusetmp
+RUN sudo chown docker /mnt/blobfusetmp
+RUN sudo mount -t tmpfs -o size=16g tmpfs /mnt/blobfusetmp
+COPY connection.cfg /config/
+RUN sudo mkdir /data/
+RUN sudo blobfuse /data/ --tmp-path=/mnt/blobfusetmp  --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
+
 # workdir set. pray it dosent try to go exploring.
 WORKDIR /mnt/data
