@@ -162,6 +162,7 @@ class DockerProcWrapper:
 
     def init_container(self):
         self.container = None
+        data_path = "/home/azureuser/data"
         try:
             containers = self.client.containers(
                 filters={"label": f"session_id={self.session_id}"}, all=True)
@@ -178,7 +179,7 @@ class DockerProcWrapper:
                     os.makedirs(self.session_path, exist_ok=True)
 
                     host_config = self.client.create_host_config(
-                        binds={self.session_path: {'bind': '/mnt/data', 'mode': 'rw'}}
+                        binds={self.session_path: {'bind': '/mnt/data', 'mode': 'rw'}, data_path: {'bind': '/data/', 'mode': 'ro'}}
                     )
                 else:
                     host_config = None
