@@ -104,17 +104,18 @@ RUN echo '{}' > /tmp/package.json
 #RUN rm /tmp/package.json /tmp/node_requirements.txt /tmp/python_requirements.txt /tmp/r_requirements.txt
 
 #Blobfuse
-RUN sudo apt-get install git -y
-RUN git clone https://github.com/Azure/azure-storage-fuse/
-RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnutls28-dev uuid-dev libgcrypt20-dev libboost-all-dev gcc g++ -y
-#RUN cd azure-storage-fuse
-RUN chmod 755 azure-storage-fuse/build.sh
-RUN sh azure-storage-fuse/build.sh
-RUN curl -sSL -O https://packages.microsoft.com/debian/10/prod/pool/main/b/blobfuse/blobfuse-1.4.5-Debian10.0-x86_64.deb
-RUN sudo dpkg -i blobfuse-1.4.5-Debian10.0-x86_64.deb
-RUN rm packages-microsoft-prod.deb
+#RUN sudo apt-get install git -y
+#RUN git clone https://github.com/Azure/azure-storage-fuse/
+#RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnutls28-dev uuid-dev libgcrypt20-dev libboost-all-dev gcc g++ -y
+##RUN cd azure-storage-fuse
+#RUN chmod 755 azure-storage-fuse/build.sh
+#RUN sh azure-storage-fuse/build.sh
+RUN apt-get update \
+    && apt-get install -y wget apt-utils \
+    && wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
 RUN sudo apt-get update
-#RUN sudo apt-get install blobfuse fuse -y
+RUN sudo apt-get install blobfuse fuse -y
 RUN sudo mkdir /mnt/blobfusetmp
 RUN sudo chown docker /mnt/blobfusetmp
 RUN sudo mount -t tmpfs -o size=16g tmpfs /mnt/blobfusetmp
