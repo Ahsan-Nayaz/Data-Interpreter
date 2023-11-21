@@ -110,7 +110,7 @@ RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnu
 ##RUN cd azure-storage-fuse
 #RUN chmod 755 azure-storage-fuse/build.sh
 #RUN sh azure-storage-fuse/build.sh
-RUN sudo usermod -aG fuse docker
+
 RUN apt-get update \
     && apt-get install -y wget apt-utils \
     && wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
@@ -120,6 +120,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
     && rm -rf /var/lib/apt/lists/*
 RUN sudo mkdir /blobfusetmp/
+RUN sudo usermod -aG fuse docker
 RUN chown -R docker:docker /blobfusetmp/
 RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 COPY connection.cfg /config/
