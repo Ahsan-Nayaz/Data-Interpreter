@@ -76,6 +76,7 @@ def build_docker_images(
         Print("Dockerfile or requirements.txt has changed. Building container...")
 
         try:
+            print("Building Docker image...")
             # Run the subprocess without capturing stdout and stderr
             # This will allow Docker's output to be printed to the console in real-time
             subprocess.run(
