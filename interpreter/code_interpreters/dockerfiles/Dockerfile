@@ -7,7 +7,7 @@ ENV DEBIAN_FRONTEND=noninteractive
 # Create user with sudo only in the container for security.
 RUN useradd docker && echo "docker:docker" | chpasswd && mkdir -p /home/docker && chown docker:docker /home/docker
 RUN mkdir -p /mnt/data && chown -R docker:docker /mnt/data
-
+RUN mkdir /data/ && chown -R docker:docker /data/
 RUN apt-get update && apt-get install -y sudo
 
 RUN usermod -aG sudo docker
