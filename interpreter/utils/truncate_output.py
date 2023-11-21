@@ -1,4 +1,4 @@
-def truncate_output(data, max_output_chars=15000):
+def truncate_output(data, max_output_chars=2000):
   needs_truncation = False
 
   message = f'Output truncated. Showing the last {max_output_chars} characters.\n\n'
