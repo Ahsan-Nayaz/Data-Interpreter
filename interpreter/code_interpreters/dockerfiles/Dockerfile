@@ -18,12 +18,12 @@ RUN apt-get update \
     && apt-get update \
     && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
     && rm -rf /var/lib/apt/lists/*
-RUN sudo mkdir /blobfusetmp/
+RUN mkdir /blobfusetmp/
 #RUN chown -R docker:docker /blobfusetmp/
-RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
+RUN mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 COPY connection.cfg /config/
-RUN sudo mkdir /data/
-RUN sudo blobfuse /data/ --tmp-path=/blobfusetmp/ --basic-remount-check=true --use-https=true --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
+RUN mkdir /data/
+RUN blobfuse /data/ --tmp-path=/blobfusetmp/ --basic-remount-check=true --use-https=true --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
 
 # Create user with sudo only in the container for security.
 RUN useradd docker && echo "docker:docker" | chpasswd && mkdir -p /home/docker && chown docker:docker /home/docker
