@@ -10,6 +10,20 @@ RUN apt-get update \
 ENV LANG en_US.utf8
 # Set environment variables to disable prompts
 ENV DEBIAN_FRONTEND=noninteractive
+RUN apt-get update \
+    && apt-get install -y wget apt-utils \
+    && wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && apt-get remove -y wget \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
+    && rm -rf /var/lib/apt/lists/*
+RUN sudo mkdir /blobfusetmp/
+#RUN chown -R docker:docker /blobfusetmp/
+RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
+COPY connection.cfg /config/
+RUN sudo mkdir /data/
+RUN sudo blobfuse /data/ --tmp-path=/blobfusetmp/ --basic-remount-check=true --use-https=true --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
 
 # Create user with sudo only in the container for security.
 RUN useradd docker && echo "docker:docker" | chpasswd && mkdir -p /home/docker && chown docker:docker /home/docker
@@ -110,20 +124,6 @@ RUN sudo apt-get install pkg-config libfuse-dev cmake libcurl4-gnutls-dev libgnu
 ##RUN cd azure-storage-fuse
 #RUN chmod 755 azure-storage-fuse/build.sh
 #RUN sh azure-storage-fuse/build.sh
-RUN apt-get update \
-    && apt-get install -y wget apt-utils \
-    && wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && apt-get remove -y wget \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
-    && rm -rf /var/lib/apt/lists/*
-RUN sudo mkdir /blobfusetmp/
-RUN chown -R docker:docker /blobfusetmp/
-RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
-COPY connection.cfg /config/
-RUN sudo mkdir /data/
-RUN sudo blobfuse /data/ --tmp-path=/blobfusetmp/ --basic-remount-check=true --use-https=true --config-file=/config/connection.cfg -o attr_timeout=240 -o entry_timeout=240 -o negative_timeout=120 -o allow_other
 
 # workdir set. pray it dosent try to go exploring.
 WORKDIR /mnt/data
