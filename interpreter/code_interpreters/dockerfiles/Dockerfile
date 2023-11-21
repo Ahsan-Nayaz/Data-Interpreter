@@ -19,7 +19,7 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
     && rm -rf /var/lib/apt/lists/*
 RUN mkdir /blobfusetmp/
-#RUN chown -R docker:docker /blobfusetmp/
+RUN chmod 777 /blobfusetmp
 RUN mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 COPY connection.cfg /config/
 RUN mkdir /data/
