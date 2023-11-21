@@ -177,7 +177,7 @@ class DockerProcWrapper:
                 if self.mount:
 
                     os.makedirs(self.session_path, exist_ok=True)
-
+                    os.makedirs(data_path, exist_ok=True)
                     host_config = self.client.create_host_config(
                         binds={self.session_path: {'bind': '/mnt/data', 'mode': 'rw'}, data_path: {'bind': '/data/', 'mode': 'ro'}}
                     )
