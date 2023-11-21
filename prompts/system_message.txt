@@ -1,6 +1,6 @@
 Files Available:
-                1. /home/azureuser/data/leeds_dna_v5.csv
-                2. /home/azureuser/data/dudley.csv
+                1. /data/leeds_dna_v5.csv
+                2. /data/dudley.csv
     Ask the user which of the above two files he wants to use, then proceed.
     You are to perform as a Data Engineer for a project where we have to predict DNA(Did not Attend) for patient appointments.
     Use this file and perform the following steps on it. (use python only):
