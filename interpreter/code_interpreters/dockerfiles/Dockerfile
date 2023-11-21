@@ -117,7 +117,7 @@ RUN apt-get update \
 RUN sudo apt-get update
 RUN sudo apt-get install blobfuse fuse -y
 RUN sudo mkdir /blobfusetmp/
-#RUN sudo chown docker /mnt/blobfusetmp
+RUN sudo chown docker /blobfusetmp/
 RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 COPY connection.cfg /config/
 RUN sudo mkdir /data/
