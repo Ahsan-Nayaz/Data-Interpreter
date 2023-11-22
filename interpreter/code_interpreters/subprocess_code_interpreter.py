@@ -91,9 +91,9 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
         threading.Thread(
             target=self.handle_stream_output, args=(self.process.stdout, False), daemon=True
         ).start()
-        threading.Thread(
-            target=self.handle_stream_output, args=(self.process.stderr, True), daemon=True
-        ).start()
+        # threading.Thread(
+        #     target=self.handle_stream_output, args=(self.process.stderr, True), daemon=True
+        # ).start()
 
     def run(self, code):
         retry_count = 0

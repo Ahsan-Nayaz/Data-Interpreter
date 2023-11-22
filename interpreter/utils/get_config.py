@@ -9,6 +9,7 @@ config_filename = "config.yaml"
 
 user_config_path = os.path.join(get_storage_path(), config_filename)
 
+
 def get_config_path(path=user_config_path):
     # check to see if we were given a path that exists
     if not os.path.exists(path):
@@ -28,10 +29,9 @@ def get_config_path(path=user_config_path):
                 else:
                     # Ensure the user-specific directory exists
                     os.makedirs(get_storage_path(), exist_ok=True)
-                    
+
                     # otherwise, we'll create the file in our default config directory
                     path = os.path.join(get_storage_path(), path)
-
 
                 # If user's config doesn't exist, copy the default config from the package
                 here = os.path.abspath(os.path.dirname(__file__))
@@ -42,6 +42,7 @@ def get_config_path(path=user_config_path):
                 new_file = shutil.copy(default_config_path, path)
 
     return path
+
 
 def get_config(path=user_config_path):
     path = get_config_path(path)
