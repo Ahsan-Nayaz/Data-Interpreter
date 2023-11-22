@@ -3,30 +3,9 @@ from ..utils.merge_deltas import merge_deltas
 from ..utils.parse_partial_json import parse_partial_json
 from ..utils.convert_to_openai_messages import convert_to_openai_messages
 from ..utils.display_markdown_message import display_markdown_message
+from .get_schema import get_schema
 import tokentrim as tt
 
-
-function_schema = {
-  "name": "execute",
-  "description":
-  "Executes code on the user's machine, **in the users local environment**, and returns the output",
-  "parameters": {
-    "type": "object",
-    "properties": {
-      "language": {
-        "type": "string",
-        "description":
-        "The programming language (required parameter to the `execute` function)",
-        "enum": ["python", "R", "shell", "applescript", "javascript", "html", "powershell"]
-      },
-      "code": {
-        "type": "string",
-        "description": "The code to execute (required)"
-      }
-    },
-    "required": ["language", "code"]
-  },
-}
 
 def setup_openai_coding_llm(interpreter):
     """
@@ -35,7 +14,7 @@ def setup_openai_coding_llm(interpreter):
     """
 
     def coding_llm(messages):
-        
+
         # Convert messages
         messages = convert_to_openai_messages(messages, function_calling=True)
 
@@ -52,7 +31,8 @@ def setup_openai_coding_llm(interpreter):
             messages = tt.trim(messages=messages, system_message=system_message, model=interpreter.model)
         except:
             if interpreter.context_window:
-                messages = tt.trim(messages=messages, system_message=system_message, max_tokens=interpreter.context_window)
+                messages = tt.trim(messages=messages, system_message=system_message,
+                                   max_tokens=interpreter.context_window)
             else:
                 display_markdown_message("""
                 **We were unable to determine the context window of this model.** Defaulting to 3000.
@@ -68,7 +48,7 @@ def setup_openai_coding_llm(interpreter):
             'model': interpreter.model,
             'messages': messages,
             'stream': True,
-            'functions': [function_schema]
+            'functions': [get_schema()]
         }
 
         # Optional inputs
@@ -80,7 +60,7 @@ def setup_openai_coding_llm(interpreter):
             params["max_tokens"] = interpreter.max_tokens
         if interpreter.temperature:
             params["temperature"] = interpreter.temperature
-        
+
         # These are set directly on LiteLLM
         if interpreter.max_budget:
             litellm.max_budget = interpreter.max_budget
@@ -111,8 +91,8 @@ def setup_openai_coding_llm(interpreter):
             if "content" in delta and delta["content"]:
                 yield {"message": delta["content"]}
 
-            if ("function_call" in accumulated_deltas 
-                and "arguments" in accumulated_deltas["function_call"]):
+            if ("function_call" in accumulated_deltas
+                    and "arguments" in accumulated_deltas["function_call"]):
 
                 arguments = accumulated_deltas["function_call"]["arguments"]
                 arguments = parse_partial_json(arguments)
@@ -120,12 +100,12 @@ def setup_openai_coding_llm(interpreter):
                 if arguments:
 
                     if (language is None
-                        and "language" in arguments
-                        and "code" in arguments # <- This ensures we're *finished* typing language, as opposed to partially done
-                        and arguments["language"]):
+                            and "language" in arguments
+                            and "code" in arguments  # <- This ensures we're *finished* typing language, as opposed to partially done
+                            and arguments["language"]):
                         language = arguments["language"]
                         yield {"language": language}
-                    
+
                     if language is not None and "code" in arguments:
                         # Calculate the delta (new characters only)
                         code_delta = arguments["code"][len(code):]
@@ -133,6 +113,6 @@ def setup_openai_coding_llm(interpreter):
                         code = arguments["code"]
                         # Yield the delta
                         if code_delta:
-                          yield {"code": code_delta}
-            
+                            yield {"code": code_delta}
+
     return coding_llm
