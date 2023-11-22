@@ -3,7 +3,7 @@ numpy
 pandas
 matplotlib
 beautifulsoup4
-dask
+dask[complete]
 
 [r]
 
