@@ -6,7 +6,6 @@ import sys
 sys.modules['sqlite3'] = sys.modules.pop('pysqlite3')
 import chainlit as cl
 from interpreter.core.core import Interpreter
-import interpreter
 from dotenv import load_dotenv
 import logging
 import secrets
@@ -30,7 +29,7 @@ async def start():
     Store the unique ID in the user session.
     """
     unique_id = secrets.token_urlsafe(16)
-    # interpreter = Interpreter()
+    interpreter = Interpreter()
     if interpreter is not None:
         interpreter.reset()
     else:
