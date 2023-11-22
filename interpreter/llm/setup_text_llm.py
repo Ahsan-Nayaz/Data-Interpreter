@@ -1,5 +1,4 @@
 
-
 import litellm
 
 from ..utils.display_markdown_message import display_markdown_message
@@ -27,14 +26,14 @@ def setup_text_llm(interpreter):
             # this gets set up in the terminal interface / validate LLM settings.
             # then that's passed into this:
             return setup_local_text_llm(interpreter)
-        
+
         # If we're here, it means the user wants to use
         # an OpenAI compatible endpoint running on localhost
 
         if interpreter.api_base is None:
             raise Exception('''To use Open Interpreter locally, either provide a huggingface model via `interpreter --model huggingface/{huggingface repo name}`
                             or a localhost URL that exposes an OpenAI compatible endpoint by setting `interpreter --api_base {localhost URL}`.''')
-        
+
         # Tell LiteLLM to treat the endpoint as an OpenAI proxy
         model = "custom_openai/" + interpreter.model
 
@@ -52,8 +51,9 @@ def setup_text_llm(interpreter):
             \n\n**We have likely not built the proper `{interpreter.model}` support for your system.**
             \n\n(*Running language models locally is a difficult task!* If you have insight into the best way to implement this across platforms/architectures, please join the `Open Interpreter` community Discord, or the `Oobabooga` community Discord, and consider contributing the development of these projects.)
             """)
-            
-            raise Exception("Architecture not yet supported for local LLM inference via `Oobabooga`. Please run `interpreter` to connect to a cloud model.")
+
+            raise Exception \
+                ("Architecture not yet supported for local LLM inference via `Oobabooga`. Please run `interpreter` to connect to a cloud model.")
 
     # Pass remaining parameters to LiteLLM
     def base_llm(messages):
@@ -86,7 +86,7 @@ def setup_text_llm(interpreter):
 
         if interpreter.debug_mode:
             print("Passing messages into LLM:", messages)
-    
+
         # Create LiteLLM generator
         params = {
             'model': interpreter.model,
