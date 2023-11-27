@@ -59,7 +59,20 @@ RUN awk '/\[node\]/, /^\s*$/' /tmp/requirements.txt | grep -v '^\[node\]' > /tmp
     done < /tmp/node_requirements.txt
 
 
+RUN apt-get update \
+    && apt-get install -y wget apt-utils \
+    && wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && dpkg -i packages-microsoft-prod.deb \
+    && apt-get remove -y wget \
+    && apt-get update \
+    && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
+    && rm -rf /var/lib/apt/lists/* \
 
+RUN sudo mkdir /mnt/blobfusetmp
+RUN sudo chown docker /mnt/blobfusetmp
+RUN sudo mount -t tmpfs -o size=16g tmpfs /mnt/blobfusetmp
+RUN sudo mkdir ~/blobdata
+RUN sudo blobfuse ~/blobdata --tmp-path=/mnt/resource/blobfusetmp  --config-file=connection.cfg -o allow_other
 # Install NodeJS packages
 RUN npm install --save --yes --no-package-lock --prefix /tmp
 
