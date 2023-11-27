@@ -4,6 +4,13 @@ FROM debian:bullseye
 # Set environment variables to disable prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
+RUN apt-get update \
+    && apt-get install -y --no-install-recommends locales \
+    && rm -rf /var/lib/apt/lists/* \
+    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
+
+ENV LANG en_US.utf8
+
 # Create user with sudo only in the container for security.
 RUN useradd docker && echo "docker:docker" | chpasswd && mkdir -p /home/docker && chown docker:docker /home/docker
 RUN mkdir -p /mnt/workspace && chown -R docker:docker /mnt/workspace
