@@ -110,7 +110,6 @@ class Interpreter:
 
         return self.messages
 
-        return self.messages
 
     def _streaming_chat(self, message=None, display=True, uuid=None):
 
