@@ -75,9 +75,9 @@ RUN apt-get update \
     && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
     && rm -rf /var/lib/apt/lists/*
 
-RUN mkdir -p /tmp/blobfusetmp
+RUN sudo mkdir -p /tmp/blobfusetmp && chown -R docker:docker /tmp/blobfusetmp
 RUN sudo chmod 777 /tmp/blobfusetmp
-RUN sudo mount -t tmpfs -o size=16g tmpfs /tmp/blobfusetmp
+RUN sudo mount -t overlay -o size=16g tmpfs /tmp/blobfusetmp
 RUN mkdir ~/blobdata
 RUN sudo blobfuse ~/blobdata --tmp-path=/tmp/blobfusetmp/  --config-file=connection.cfg -o allow_other
 # Install NodeJS packages
