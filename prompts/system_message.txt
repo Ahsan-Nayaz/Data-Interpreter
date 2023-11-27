@@ -8,63 +8,13 @@ Files Available:
     Use this file and perform the following steps on it. (use python only):
     !important
     1. Data Cleaning
-            -   Import all the necessary libraries.
-            -   Check for null columns, if there are any, drop them .
-            -   Check for any index columns, if there are any, drop them.
-            -   Check for null values in the columns (null_values_check = df_clean.columns[df_clean.isnull().any()]), if there is a categorical variable like "Ethnicity" which can imputed with backward and forward filling using some unique identifier then do that or you can go through unique values and if there is a category in the column such as "unknown" or "other" then impute that. And drop the rows from the columns with very less number of null values.
-            -   Check the data frame for columns which might not help in prediction of "did not attend", drop them after confirming with user.
-
+        **read from prompts/rules_for_data_cleaning.txt**
     !important
     2. Feature Engineering:
-            Rules for feature engineering:
-            -   Create a ‘dna’ boolean column and ‘cnd’ column. 'dna' is for did not attend and 'cnd' is for cancelled.
-            -   Calculate the waiting time period for a patient by going through the dataframe and checking which columns to use for appointment date and when the appointment was made. Drop the rows with negative waiting time
-            -   Calculate distance between the patient and the location of appointment.
-            -   Convert the temporal features to separate column as "Appointment Hour", "Appointment Day", "Appointment Month", "Appointment Year".
-            You need to create the following columns,
-                ◦	Previous appointments
-                ◦	Previous DNAs
-                ◦	Previous cancelations
-                ◦	DNA rate
-                ◦	Cancellation rate
-                ◦	Previous appointments (last 30 days)
-                ◦	Previous DNAs (last 30 days)
-                ◦	DNA rate (last 30 days)
-                ◦	Cancellation rate (last 30 days)
-                ◦	Previous appointments (last 90 days)
-                ◦	Previous DNAs (last 90 days)
-                ◦	DNA rate (last 90 days)
-                ◦	Cancellation rate (last 90 days)
-            Use patients unique identifier or patient number to calculate the prev dnas they have done.
+            **read from prompts/rules_for_feature_engineering.txt**
     !important
     3. Feature Selection
-            General approach to feature selection
-            We can use "filter-based" feature selection methods as a first step to reduce the feature space and avoid this:
-                Chi-squared
-                T-Test
-                Mutual information
-            These are much less computationally expensive methods and we can apply RFE to the reduced feature space afterwards.
-            Filter-based feature selection steps:
-                Ensure that the correct datatypes are in place for all columns
-                Split into test and train sets using a time-series based split (aim for around 80/20 split)
-                Separate into X and y sets
-                Perform filter based feature selection on the train set only, using different approaches for categorical and numerical features:
-                Categorical features (chi-squared).
-                    See section 4.0 of the notebook above.
-                    Encode categorical columns using One Hot Encoding
-                    Perform a chi-squared test between the encoded features and y_train
-                    Select only those features with a p-value <= 0.05
-                Numerical features (t-test):
-                    Perform t-tests between the numerical features and y_train.
-                NOTE: Make sure you exclude any of the binary encoded categorical features from this analysis.
-                Select only those features with a p-value <= 0.05
-                Combine the remaining features to produce a new feature set.
-                Perform further feature selection on the new feature set.
-                Mutual information:
-                    The new feature set can be passed to a Mutual Information (MI) classifier as an additional feature selection step.
-                    This will take longer than chi-squared a t-testing however, so can be skipped if you don't have much time.
-                    To determine the optimal number of features using MI, you should plot the features' MI scores and choose the subset above the "elbow" of the plot. Code to do this exists in the notebook.
-                    Choose the subset of features above the elbow and take into the next step.
+            **read from prompts/rules_for_feature_selection.txt**
     4. Model Creation
             **save model to {download} folder**
     Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
