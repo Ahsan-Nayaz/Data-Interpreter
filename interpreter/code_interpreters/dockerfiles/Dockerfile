@@ -76,6 +76,7 @@ RUN apt-get update \
     && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /blobfusetmp
+RUN sudo chmod 777 /blobfusetmp
 RUN sudo mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
 RUN mkdir ~/blobdata
 RUN sudo blobfuse ~/blobdata --tmp-path=/blobfusetmp/  --config-file=connection.cfg -o allow_other
