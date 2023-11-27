@@ -4,13 +4,6 @@ FROM debian:bullseye
 # Set environment variables to disable prompts
 ENV DEBIAN_FRONTEND=noninteractive
 
-RUN apt-get update \
-    && apt-get install -y --no-install-recommends locales \
-    && rm -rf /var/lib/apt/lists/* \
-    && localedef -i en_US -c -f UTF-8 -A /usr/share/locale/locale.alias en_US.UTF-8
-
-ENV LANG en_US.utf8
-
 # Create user with sudo only in the container for security.
 RUN useradd docker && echo "docker:docker" | chpasswd && mkdir -p /home/docker && chown docker:docker /home/docker
 RUN mkdir -p /mnt/workspace && chown -R docker:docker /mnt/workspace
@@ -65,21 +58,6 @@ RUN awk '/\[node\]/, /^\s*$/' /tmp/requirements.txt | grep -v '^\[node\]' > /tmp
         jq ".dependencies.\"$name\" = \"$version\"" /tmp/package.json > /tmp/package_temp.json && mv /tmp/package_temp.json /tmp/package.json; \
     done < /tmp/node_requirements.txt
 
-
-RUN apt-get update \
-    && apt-get install -y wget apt-utils \
-    && wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb \
-    && dpkg -i packages-microsoft-prod.deb \
-    && apt-get remove -y wget \
-    && apt-get update \
-    && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
-    && rm -rf /var/lib/apt/lists/*
-
-RUN sudo mkdir -p /tmp/blobfusetmp && chown -R docker:docker /tmp/blobfusetmp
-RUN sudo chmod 777 /tmp/blobfusetmp
-RUN sudo mount -t overlay -o size=16g tmpfs /tmp/blobfusetmp
-RUN mkdir ~/blobdata
-RUN sudo blobfuse ~/blobdata --tmp-path=/tmp/blobfusetmp/  --config-file=connection.cfg -o allow_other
 # Install NodeJS packages
 RUN npm install --save --yes --no-package-lock --prefix /tmp
 
