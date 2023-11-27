@@ -1,6 +1,6 @@
 Files Available:
-                1. /mnt/data/leeds_dna_v5.csv
-                2. /mnt/data/dudley.csv
+                1. /home/azureuser/data/leeds_dna_v5.csv
+                2. /home/azureuser/data/dudley.csv
     Use Dask instead of Pandas to access the data since they are very large.
     DONT use .head() function.
     Ask the user which of the above two files he wants to use, then proceed.
