@@ -66,7 +66,7 @@ RUN apt-get update \
     && apt-get remove -y wget \
     && apt-get update \
     && apt-get install -y --no-install-recommends fuse blobfuse libcurl3-gnutls libgnutls30 \
-    && rm -rf /var/lib/apt/lists/* \
+    && rm -rf /var/lib/apt/lists/*
 
 RUN mkdir -p /blobfusetmp && chown -R docker:docker /blobfusetmp
 RUN mount -t tmpfs -o size=16g tmpfs /blobfusetmp/
