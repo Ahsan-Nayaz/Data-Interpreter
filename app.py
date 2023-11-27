@@ -49,7 +49,7 @@ async def start():
     except Exception as e:
         logging.error(f"Error occurred while reading system_message.txt: {str(e)}")
 
-    llm_chain = cl.make_async(interpreter.chat)
+    llm_chain = cl.make_async(interpreter.chat())
     cl.user_session.set("llm_chain", llm_chain)
     cl.user_session.set("unique_id", unique_id)
 
