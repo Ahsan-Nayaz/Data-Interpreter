@@ -61,7 +61,7 @@ RUN awk '/\[node\]/, /^\s*$/' /tmp/requirements.txt | grep -v '^\[node\]' > /tmp
 
 RUN apt-get update \
     && apt-get install -y wget apt-utils \
-    && wget https://packages.microsoft.com/config/ubuntu/18.04/packages-microsoft-prod.deb \
+    && wget https://packages.microsoft.com/config/ubuntu/20.04/packages-microsoft-prod.deb \
     && dpkg -i packages-microsoft-prod.deb \
     && apt-get remove -y wget \
     && apt-get update \
