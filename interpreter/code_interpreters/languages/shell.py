@@ -22,12 +22,12 @@ class Shell(SubprocessCodeInterpreter):
         return line
 
     def detect_active_line(self, line):
-        if "## active_line " in line:
+        if b"## active_line " in line:
             return int(line.split("## active_line ")[1].split(" ##")[0])
         return None
 
     def detect_end_of_execution(self, line):
-        return "## end_of_execution ##" in line
+        return b"## end_of_execution ##" in line
         
 
 def preprocess_shell(code):
