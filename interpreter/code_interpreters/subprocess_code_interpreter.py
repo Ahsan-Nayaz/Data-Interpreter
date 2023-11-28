@@ -161,6 +161,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
 
     def handle_stream_output(self, stream, is_error_stream):
         for line in iter(stream.readline, ""):
+            line = line.encode('utf-8')
             if self.debug_mode:
                 print(f"Received output line:\n{line}\n---")
 
