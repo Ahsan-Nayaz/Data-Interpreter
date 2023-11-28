@@ -79,7 +79,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 **self.container_args
                 )
             self.dock.init_container()
-            self.process = subprocess.Popen(["docker", "exec", "-i", self.dock.container_id, "python3"],
+            self.process = subprocess.Popen(["docker", "exec", "-i", self.dock.container.get('Id'), "python3"],
                                             stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             print(self.container_args)
         else:
