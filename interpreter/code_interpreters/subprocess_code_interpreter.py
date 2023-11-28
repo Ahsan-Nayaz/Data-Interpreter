@@ -99,7 +99,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                                             stdout=subprocess.PIPE,
                                             stderr=subprocess.PIPE,
                                             text=True,
-                                            bufsize=1,
+                                            bufsize=0,
                                             universal_newlines=True,)
             print(self.dock.container.get('Id'))
         else:
