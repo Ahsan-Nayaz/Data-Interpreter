@@ -94,13 +94,13 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 **self.container_args
                 )
             self.dock.init_container()
-            self.process = subprocess.Popen(["sudo", "docker", "exec", "-it", "-d", self.dock.container.get('Id'), *self.start_cmd.split()],
+            self.process = subprocess.Popen(["sudo", "docker", "exec", "-i", self.dock.container.get('Id'), "python3"],
                                             stdin=subprocess.PIPE,
                                             stdout=subprocess.PIPE,
                                             stderr=subprocess.PIPE,
                                             text=True,
                                             bufsize=1,
-                                            universal_newlines=True,)
+                                            universal_newlines=True)
             print(self.dock.container.get('Id'))
         else:
             self.process = subprocess.Popen(
