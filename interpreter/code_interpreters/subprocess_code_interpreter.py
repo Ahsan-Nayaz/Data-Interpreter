@@ -86,7 +86,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                                             text=True,
                                             bufsize=1,
                                             universal_newlines=True,)
-            print(self.container_args)
+            print(self.dock.container.get('Id'))
         else:
             self.process = subprocess.Popen(
                 self.start_cmd.split(),
