@@ -80,7 +80,12 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 )
             self.dock.init_container()
             self.process = subprocess.Popen(["docker", "exec", "-i", self.dock.container.get('Id'), "python3"],
-                                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
+                                            stdin=subprocess.PIPE,
+                                            stdout=subprocess.PIPE,
+                                            stderr=subprocess.PIPE,
+                                            text=True,
+                                            bufsize=0,
+                                            universal_newlines=True,)
             print(self.container_args)
         else:
             self.process = subprocess.Popen(
@@ -176,10 +181,19 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             elif self.detect_end_of_execution(line):
                 self.output_queue.put({"active_line": None})
                 time.sleep(0.1)
+                # Close stdin to signal the end of input
+                self.process.stdin.close()
+                # Terminate the subprocess
+                self.process.terminate()
+
                 self.done.set()
             elif is_error_stream and b"KeyboardInterrupt" in line:
                 self.output_queue.put({"output": "KeyboardInterrupt"})
                 time.sleep(0.1)
+                # Close stdin to signal the end of input
+                self.process.stdin.close()
+                # Terminate the subprocess
+                self.process.terminate()
                 self.done.set()
             else:
                 self.output_queue.put({"output": line})
