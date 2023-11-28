@@ -94,7 +94,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 **self.container_args
                 )
             self.dock.init_container()
-            self.process = subprocess.Popen(["sudo", "docker", "exec", "-it", "-d", self.dock.container.get('Id'), self.start_cmd.split()],
+            self.process = subprocess.Popen(["sudo", "docker", "exec", "-it", "-d", self.dock.container.get('Id'), *self.start_cmd.split()],
                                             stdin=subprocess.PIPE,
                                             stdout=subprocess.PIPE,
                                             stderr=subprocess.PIPE,
