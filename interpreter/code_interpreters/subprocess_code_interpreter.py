@@ -84,7 +84,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                                             stdout=subprocess.PIPE,
                                             stderr=subprocess.PIPE,
                                             text=True,
-                                            bufsize=0,
+                                            bufsize=1,
                                             universal_newlines=True,)
             print(self.container_args)
         else:
