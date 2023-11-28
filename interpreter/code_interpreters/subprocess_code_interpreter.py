@@ -94,12 +94,12 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 **self.container_args
                 )
             self.dock.init_container()
-            self.process = subprocess.Popen(["sudo", "docker", "exec", "-i", self.dock.container.get('Id'), "python3"],
+            self.process = subprocess.Popen(["sudo", "docker", "exec", "-it", "-d", self.dock.container.get('Id'), "python3"],
                                             stdin=subprocess.PIPE,
                                             stdout=subprocess.PIPE,
                                             stderr=subprocess.PIPE,
                                             text=True,
-                                            bufsize=0,
+                                            bufsize=1,
                                             universal_newlines=True,)
             print(self.dock.container.get('Id'))
         else:
@@ -145,6 +145,8 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 print('here')
                 self.process.stdin.write(code + "\n")
                 print('here2')
+                self.process.stdin.flush()
+                print('here3')
                 # self.process.communicate(input=(code + "\n").encode('utf-8'))
                 break
             except subprocess.SubprocessError:
@@ -163,9 +165,9 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 if retry_count > max_retries:
                     yield {"output": "Maximum retries reached. Could not execute code."}
                     return
-            finally:
-                # Close stdin to signal the end of input
-                self.process.stdin.flush()
+            # finally:
+            #     # Close stdin to signal the end of input
+            #     self.process.stdin.close()
         while True:
             if not self.output_queue.empty():
                 yield self.output_queue.get()
@@ -201,14 +203,10 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             elif self.detect_end_of_execution(line):
                 self.output_queue.put({"active_line": None})
                 time.sleep(0.1)
-                self.process.stdin.flush()
-                print('here3')
                 self.done.set()
             elif is_error_stream and "KeyboardInterrupt" in line:
                 self.output_queue.put({"output": "KeyboardInterrupt"})
                 time.sleep(0.1)
-                self.process.stdin.flush()
-                print('here3')
                 self.done.set()
             else:
                 self.output_queue.put({"output": line})
