@@ -125,7 +125,9 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             self.done.clear()
 
             try:
+                print('here')
                 self.process.stdin.write(code + "\n")
+                print('here2')
                 self.process.stdin.flush()
                 # self.process.communicate(input=(code + "\n").encode('utf-8'))
                 break
