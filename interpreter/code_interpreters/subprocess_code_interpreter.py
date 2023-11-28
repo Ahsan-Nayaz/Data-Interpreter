@@ -114,6 +114,8 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             code = self.preprocess_code(code)
             if not self.process:
                 self.start_process()
+            if self.process.stdin.closed:
+                self.start_process()
         except subprocess.SubprocessError:
             yield {"output": traceback.format_exc()}
             return
