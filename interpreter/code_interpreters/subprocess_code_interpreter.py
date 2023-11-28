@@ -163,9 +163,9 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 if retry_count > max_retries:
                     yield {"output": "Maximum retries reached. Could not execute code."}
                     return
-            # finally:
-            #     # Close stdin to signal the end of input
-            #     self.process.stdin.close()
+            finally:
+                # Close stdin to signal the end of input
+                self.process.stdin.flush()
         while True:
             if not self.output_queue.empty():
                 yield self.output_queue.get()
