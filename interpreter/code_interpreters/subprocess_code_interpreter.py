@@ -142,7 +142,6 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             self.done.clear()
 
             try:
-                self.process.stdin.open()
                 print('here')
                 self.process.stdin.write(code + "\n")
                 print('here2')
