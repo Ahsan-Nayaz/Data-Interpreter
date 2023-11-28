@@ -168,7 +168,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                     break
 
     def handle_stream_output(self, stream, is_error_stream):
-        for line in iter(stream.readline, ""):
+        for line in stream:
             # line = line.decode('utf-8')
             if self.debug_mode:
                 print(f"Received output line:\n{line}\n---")
