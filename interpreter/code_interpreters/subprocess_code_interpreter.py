@@ -164,7 +164,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             if self.debug_mode:
                 print(f"Received output line:\n{line}\n---")
 
-            line = self.line_postprocessor(line)
+            # line = self.line_postprocessor(line)
 
             if line is None:
                 continue  # `line = None` is the postprocessor's signal to discard completely
