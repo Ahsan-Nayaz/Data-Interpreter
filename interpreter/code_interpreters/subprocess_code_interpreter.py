@@ -148,6 +148,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 # self.process.stdin.flush()
                 print('here3')
                 self.process.communicate(input=(code + "\n"))
+                self.process.wait()
                 break
             except subprocess.SubprocessError:
                 yield {"output": traceback.format_exc()}
