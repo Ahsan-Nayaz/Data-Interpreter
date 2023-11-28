@@ -74,7 +74,7 @@ class Interpreter:
         self.num_procedures = 2
 
         # Container options
-        self.use_containers = False
+        self.use_containers = True
         self.session_id = None
 
         # Load config defaults

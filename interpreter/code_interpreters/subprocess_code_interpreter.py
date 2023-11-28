@@ -24,7 +24,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
     - session_id (str): The ID of the Docker container session, if `contain` is True.
     """
 
-    def __init__(self, use_containers=False, **container_args):
+    def __init__(self, use_containers=True, **container_args):
         self.container_args = container_args
         self.start_cmd = ""
         self.process = None
@@ -77,6 +77,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 command=self.start_cmd,
                 **self.container_args
                 )
+            print(**self.container_args)
         else:
             self.process = subprocess.Popen(
                 self.start_cmd.split(),
@@ -91,9 +92,9 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
         threading.Thread(
             target=self.handle_stream_output, args=(self.process.stdout, False), daemon=True
         ).start()
-        # threading.Thread(
-        #     target=self.handle_stream_output, args=(self.process.stderr, True), daemon=True
-        # ).start()
+        threading.Thread(
+            target=self.handle_stream_output, args=(self.process.stderr, True), daemon=True
+        ).start()
 
     def run(self, code):
         retry_count = 0
