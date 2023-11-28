@@ -166,7 +166,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
 
     def handle_stream_output(self, stream, is_error_stream):
         for line in iter(stream.readline, ""):
-            line = line.decode('utf-8')
+            # line = line.decode('utf-8')
             if self.debug_mode:
                 print(f"Received output line:\n{line}\n---")
 
@@ -181,19 +181,10 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             elif self.detect_end_of_execution(line):
                 self.output_queue.put({"active_line": None})
                 time.sleep(0.1)
-                # Close stdin to signal the end of input
-                self.process.stdin.close()
-                # Terminate the subprocess
-                self.process.terminate()
-
                 self.done.set()
             elif is_error_stream and b"KeyboardInterrupt" in line:
                 self.output_queue.put({"output": "KeyboardInterrupt"})
                 time.sleep(0.1)
-                # Close stdin to signal the end of input
-                self.process.stdin.close()
-                # Terminate the subprocess
-                self.process.terminate()
                 self.done.set()
             else:
                 self.output_queue.put({"output": line})
