@@ -77,7 +77,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 command=self.start_cmd,
                 **self.container_args
                 )
-            print(**self.container_args)
+            print(self.container_args)
         else:
             self.process = subprocess.Popen(
                 self.start_cmd.split(),
