@@ -57,6 +57,7 @@ def preprocess_python(code):
     code = "\n".join(code_lines)
 
     # Add end command (we'll be listening for this so we know when it ends)
+    code += "\n\nimport sys\nsys.stdout.flush()"
     code += '\n\nprint("## end_of_execution ##")\n'
 
     return code
