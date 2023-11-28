@@ -120,8 +120,9 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
             self.done.clear()
 
             try:
-                self.process.stdin.write(code + "\n")
-                self.process.stdin.flush()
+                # self.process.stdin.write(code + "\n")
+                # self.process.stdin.flush()
+                self.process.communicate(input=code + "\n")
                 break
             except subprocess.SubprocessError:
                 yield {"output": traceback.format_exc()}
