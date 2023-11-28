@@ -176,7 +176,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 self.output_queue.put({"active_line": None})
                 time.sleep(0.1)
                 self.done.set()
-            elif is_error_stream and "KeyboardInterrupt" in line:
+            elif is_error_stream and b"KeyboardInterrupt" in line:
                 self.output_queue.put({"output": "KeyboardInterrupt"})
                 time.sleep(0.1)
                 self.done.set()
