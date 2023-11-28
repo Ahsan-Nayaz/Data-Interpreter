@@ -129,6 +129,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 self.process.stdin.write(code + "\n")
                 print('here2')
                 self.process.stdin.flush()
+                print('here3')
                 # self.process.communicate(input=(code + "\n").encode('utf-8'))
                 break
             except subprocess.SubprocessError:
@@ -184,7 +185,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 self.output_queue.put({"active_line": None})
                 time.sleep(0.1)
                 self.done.set()
-            elif is_error_stream and b"KeyboardInterrupt" in line:
+            elif is_error_stream and "KeyboardInterrupt" in line:
                 self.output_queue.put({"output": "KeyboardInterrupt"})
                 time.sleep(0.1)
                 self.done.set()
