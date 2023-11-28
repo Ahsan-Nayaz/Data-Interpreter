@@ -25,6 +25,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
     """
 
     def __init__(self, use_containers=True, **container_args):
+        self.dock = None
         self.container_args = container_args
         self.start_cmd = ""
         self.process = None
@@ -73,10 +74,13 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
         """
         
         if self.use_containers:
-            self.process = DockerProcWrapper(
+            self.dock = DockerProcWrapper(
                 command=self.start_cmd,
                 **self.container_args
                 )
+            container_id = self.dock.init_container()
+            self.process = subprocess.Popen(["docker", "exec", "-i", container_id, "python3"],
+                                            stdin=subprocess.PIPE, stdout=subprocess.PIPE, stderr=subprocess.PIPE)
             print(self.container_args)
         else:
             self.process = subprocess.Popen(

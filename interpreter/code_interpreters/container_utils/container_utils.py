@@ -148,17 +148,17 @@ class DockerProcWrapper:
 
 
         # Initialize container
-        self.init_container()
-
-        self.init_exec_instance()
+        # self.init_container()
+        #
+        # self.init_exec_instance()
         
 
-        self.wrapper = DockerStreamWrapper(self.exec_id, self.exec_socket)
-        self.stdout = self.wrapper.stdout
-        self.stderr = self.wrapper.stderr
-        self.stdin = self.wrapper.stdin
-
-        self.stdin.write(command + "\n")
+        # self.wrapper = DockerStreamWrapper(self.exec_id, self.exec_socket)
+        # self.stdout = self.wrapper.stdout
+        # self.stderr = self.wrapper.stderr
+        # self.stdin = self.wrapper.stdin
+        #
+        # self.stdin.write(command + "\n")
 
     def init_container(self):
         self.container = None
