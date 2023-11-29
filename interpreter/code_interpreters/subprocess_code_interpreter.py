@@ -93,15 +93,15 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
                 command=self.start_cmd,
                 **self.container_args
                 )
-            self.dock.init_container()
-            self.process = subprocess.Popen(["sudo", "docker", "exec", "-i", self.dock.container.get('Id'), *self.start_cmd.split()],
-                                            stdin=subprocess.PIPE,
-                                            stdout=subprocess.PIPE,
-                                            stderr=subprocess.PIPE,
-                                            text=True,
-                                            bufsize=1,
-                                            universal_newlines=True)
-            print(self.dock.container.get('Id'))
+            # self.dock.init_container()
+            # self.process = subprocess.Popen(["sudo", "docker", "exec", "-i", self.dock.container.get('Id'), *self.start_cmd.split()],
+            #                                 stdin=subprocess.PIPE,
+            #                                 stdout=subprocess.PIPE,
+            #                                 stderr=subprocess.PIPE,
+            #                                 text=True,
+            #                                 bufsize=1,
+            #                                 universal_newlines=True)
+            # print(self.dock.container.get('Id'))
         else:
             self.process = subprocess.Popen(
                 self.start_cmd.split(),
@@ -143,12 +143,12 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
 
             try:
                 # print('here')
-                # self.process.stdin.write(code + "\n")
-                # print('here2')
-                # self.process.stdin.flush()
-                print('here3')
-                self.process.communicate(input=(code + "\n"))
-                self.process.wait()
+                self.process.stdin.write(code + "\n")
+                print('here2')
+                self.process.stdin.flush()
+                # print('here3')
+                # self.process.communicate(input=(code + "\n"))
+                # self.process.wait()
                 break
             except subprocess.SubprocessError:
                 yield {"output": traceback.format_exc()}
