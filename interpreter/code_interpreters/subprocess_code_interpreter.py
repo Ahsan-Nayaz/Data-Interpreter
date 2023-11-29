@@ -61,20 +61,20 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
     def terminate(self):
         self.process.terminate()
 
-    def start_container(self):
-        self.process = subprocess.Popen(["sudo", "docker", "exec", "-i", self.dock.container.get('Id'), "python3"],
-                                        stdin=subprocess.PIPE,
-                                        stdout=subprocess.PIPE,
-                                        stderr=subprocess.PIPE,
-                                        text=True,
-                                        bufsize=1,
-                                        universal_newlines=True)
-        threading.Thread(
-            target=self.handle_stream_output, args=(self.process.stdout, False), daemon=True
-        ).start()
-        threading.Thread(
-            target=self.handle_stream_output, args=(self.process.stderr, True), daemon=True
-        ).start()
+    # def start_container(self):
+    #     self.process = subprocess.Popen(["sudo", "docker", "exec", "-i", self.dock.container.get('Id'), "python3"],
+    #                                     stdin=subprocess.PIPE,
+    #                                     stdout=subprocess.PIPE,
+    #                                     stderr=subprocess.PIPE,
+    #                                     text=True,
+    #                                     bufsize=1,
+    #                                     universal_newlines=True)
+    #     threading.Thread(
+    #         target=self.handle_stream_output, args=(self.process.stdout, False), daemon=True
+    #     ).start()
+    #     threading.Thread(
+    #         target=self.handle_stream_output, args=(self.process.stderr, True), daemon=True
+    #     ).start()
 
     def start_process(self):
         """
@@ -89,7 +89,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
         """
         
         if self.use_containers:
-            self.dock = DockerProcWrapper(
+            self.process = DockerProcWrapper(
                 command=self.start_cmd,
                 **self.container_args
                 )
