@@ -71,10 +71,10 @@ class Interpreter:
         self.download_open_procedures = True
         self.embed_function = embed_function
         # Number of procedures to add to the system message
-        self.num_procedures = 2
+        self.num_procedures = 1
 
         # Container options
-        self.use_containers = True
+        self.use_containers = False
         self.session_id = None
 
         # Load config defaults

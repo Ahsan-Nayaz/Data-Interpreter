@@ -24,7 +24,7 @@ class SubprocessCodeInterpreter(BaseCodeInterpreter):
     - session_id (str): The ID of the Docker container session, if `contain` is True.
     """
 
-    def __init__(self, use_containers=True, **container_args):
+    def __init__(self, use_containers=False, **container_args):
         self.dock = None
         self.container_args = container_args
         self.start_cmd = ""
