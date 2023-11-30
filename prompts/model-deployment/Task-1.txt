@@ -1,0 +1,3 @@
+Ask the user, if they want to deploy the model.
+If yes:
+    Save the model to '/mnt/ssd/deployment' as model.pkl

@@ -6,8 +6,7 @@ import struct
 import threading
 import time
 
-
-# Third-party imports       
+# Third-party imports
 import appdirs
 import docker
 from docker.utils import kwargs_from_env
@@ -16,6 +15,7 @@ from rich import print as Print
 
 # Modules
 from .auto_remove import access_aware
+
 
 class DockerStreamWrapper:
     def __init__(self, exec_id, sock):
@@ -35,7 +35,7 @@ class DockerStreamWrapper:
         self._stop_event = threading.Event()
         self._thread = threading.Thread(target=self._listen, daemon=True)
         self._thread.start()
-    
+
     class Stream:
         def __init__(self, parent, read_fd):
             self.parent = parent
@@ -58,7 +58,7 @@ class DockerStreamWrapper:
     def _listen(self):
         while not self._stop_event.is_set():
             ready_to_read, _, _ = select.select([self._sock, self._stdin_r], [], [], None)
-            
+
             for s in ready_to_read:
                 if s == self._sock:
                     raw_data = self._sock.recv(2048)
@@ -68,9 +68,9 @@ class DockerStreamWrapper:
                 elif s == self._stdin_r:
                     # Read from the read end of the stdin pipe and add to the buffer
                     data_to_write = os.read(self._stdin_r, 2048).decode('utf-8')
-                    
+
                     # Remove escape characters for quotes but leave other backslashes untouched
-                    data_to_write =  re.sub(r'\\([\'"])', r'\1', data_to_write)
+                    data_to_write = re.sub(r'\\([\'"])', r'\1', data_to_write)
 
                     data_to_write = data_to_write.replace('\\n', '\n')
 
@@ -82,10 +82,8 @@ class DockerStreamWrapper:
                         line = self._stdin_buffer[:newline_pos + 1]  # Include the newline
                         self._stdin_buffer = self._stdin_buffer[newline_pos + 1:]
 
-
                         # Send the line to the Docker container
                         self._sock.sendall(line)
-
 
     def demux_docker_stream(self, data):
         stdout = ""
@@ -125,10 +123,11 @@ class DockerStreamWrapper:
 #    It accepts an integer value representing the desired timeout in seconds.
 # 5. In the event of an unexpected program termination, the container is still ensured to be removed,
 #    courtesy of the integration with the `atexit` module, safeguarding system resources from being unnecessarily occupied.
-@access_aware 
+@access_aware
 class DockerProcWrapper:
-    def __init__(self, command, session_id, auto_remove_timeout=None, close_callback=None, mount=True): ## Mounting isnt implemented in main code, but i did it here prior so we just hide it behind a flag for now.
-        
+    def __init__(self, command, session_id, auto_remove_timeout=None, close_callback=None,
+                 mount=True):  ## Mounting isnt implemented in main code, but i did it here prior so we just hide it behind a flag for now.
+
         # Docker stuff
         client_kwargs = kwargs_from_env()
         if client_kwargs.get('tls'):
@@ -146,12 +145,10 @@ class DockerProcWrapper:
         self.session_path = os.path.join(appdirs.user_data_dir("Open Interpreter"), "sessions", session_id)
         self.mount = mount
 
-
         # Initialize container
         self.init_container()
 
         self.init_exec_instance()
-        
 
         self.wrapper = DockerStreamWrapper(self.exec_id, self.exec_socket)
         self.stdout = self.wrapper.stdout
@@ -163,7 +160,7 @@ class DockerProcWrapper:
     def init_container(self):
         self.container = None
         data_path = "/home/azureuser/data/"
-        prompt_path="/home/azureuser/Data-Interpreter/prompts"
+        prompt_path = "/home/azureuser/Data-Interpreter/prompts"
         try:
             containers = self.client.containers(
                 filters={"label": f"session_id={self.session_id}"}, all=True)
@@ -187,7 +184,7 @@ class DockerProcWrapper:
                     )
                 else:
                     host_config = None
-                
+
                 self.container = self.client.create_container(
                     image=self.image_name,
                     detach=True,
@@ -201,7 +198,6 @@ class DockerProcWrapper:
                 self.client.start(container=self.container.get('Id'))
                 self.wait_for_container_start(self.container.get('Id'))
 
-
         except Exception as e:
             print(f"An error occurred: {e}")
 
@@ -209,7 +205,8 @@ class DockerProcWrapper:
         if self.container:
             container_info = self.client.inspect_container(self.container.get('Id'))
 
-            if container_info.get("State").get('Running') is False: # Not sure of the cause of this, but this works for now.
+            if container_info.get("State").get(
+                    'Running') is False:  # Not sure of the cause of this, but this works for now.
                 self.client.start(self.container.get("Id"))
 
             self.exec_id = self.client.exec_create(
@@ -226,9 +223,8 @@ class DockerProcWrapper:
             # when socket=True, this returns a socketIO socket, so we just kinda hijack the underlying socket
             # since docker sets up the socketio wierd and tries to make it hard to mess with and write to.
             # We make the socket "Cooperative"
-            self.exec_socket = self.client.exec_start(
-                self.exec_id, socket=True, tty=False, demux=False)._sock  # type: ignore
-
+            self.exec_socket = self.client.exec_start(self.exec_id, socket=True, tty=False,
+                                                      demux=True)._sock  # type: ignore
 
     def wait_for_container_start(self, container_id, timeout=30):
         start_time = time.time()
@@ -240,7 +236,7 @@ class DockerProcWrapper:
                 raise TimeoutError(
                     "Container did not start within the specified timeout.")
             time.sleep(1)
-    
+
     def terminate(self):
         self.wrapper.terminate()
         self.client.stop(self.container.get("Id"))
@@ -250,11 +246,5 @@ class DockerProcWrapper:
         self.wrapper.terminate()
         self.client.stop(self.container.get("Id"), 30)
 
-
     def __del__(self):
         self.terminate()
-
-
-
-
-

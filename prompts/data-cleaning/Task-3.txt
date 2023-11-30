@@ -1,0 +1,8 @@
+Check each column of the data frame for missing values and report the proportion of missing values to the user.
+Suggest that the user drops any columns found to have 100% missing values.
+
+Assumptions:
+    Columns with a 100% missing values are irrelevant.
+
+Consideration:
+    Null values might carry information; blindly dropping columns with smaller proportions of missing values can lead to loss of meaningful data.

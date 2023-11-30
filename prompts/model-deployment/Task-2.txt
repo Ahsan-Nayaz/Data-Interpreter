@@ -1,0 +1,4 @@
+Create a transformation.py file, rewrite if already exists.
+this will have a function called transform_data which accepts a model input values (data) as input
+transforms it such that it can fed into the model, and returns the transformed values.
+write only the function as it will be called upon externally.

@@ -1,0 +1,11 @@
+If there are missing Ethnicity values, you shold impute these with a two-fold approach.
+First, check for a patient ID column or ask the user to identify one.
+Then group by this column's values and perform forward/back filling within each group.
+After doing this, check how many remaining missing Ethnicity values are left and report back to the user.
+Lastly, check the values of the Ethnicity column for any category that appears to be used to describe unknown Ethnicity
+values (eg, "Unknown", "Not known", "Not provided", etc). You can ask the user to verify your suggestions.
+Then, impute any remaining missing Ethnicity values with this category.
+
+Assumptions:
+    Ethnicity is often recorded inconsistently.
+    It is possible for the same patient to have some records with ethnicity values and some without.

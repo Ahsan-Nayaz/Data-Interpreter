@@ -1,0 +1,5 @@
+To address missing data in other categorical columns, first check the values of the column in question for any for any
+category that appears to be used to describe unknown or missing values (eg, "Unknown", "Not known", "Not provided", etc).
+You can ask the user to verify your suggestions. Then, impute any remaining missing values with this category.
+If one doesn't exist, provide the user with the choice of creating one, or of imputing using the mode or any other
+methods you believe to be approproate. You can also ask the user for their input.

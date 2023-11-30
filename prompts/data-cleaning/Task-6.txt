@@ -1,0 +1,12 @@
+You need to fill the numerical null values with either mean or median.
+
+Task:
+    Detect numerical columns with null values.
+    Fill numerical null values with either mean or median to maintain data integrity.
+
+Assumptions:
+    Mean or median imputation is suitable for numerical columns.
+
+Consideration:
+    Extreme values or specific patterns might require more advanced imputation techniques.
+

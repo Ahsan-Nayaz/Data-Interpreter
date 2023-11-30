@@ -5,7 +5,7 @@ import copy
 BASE_FUNCTION_SCHEMA = {
   "name": "execute",
   "description":
-  "Executes code on the user's machine, **in the users local environment**, and returns the output",
+  "Executes code on the server, **in an isolated environment**, and returns the output",
   "parameters": {
     "type": "object",
     "properties": {

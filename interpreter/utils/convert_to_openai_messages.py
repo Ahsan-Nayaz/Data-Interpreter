@@ -43,7 +43,7 @@ def convert_to_openai_messages(messages, function_calling=True):
             else:
                 new_messages.append({
                     "role": "user",
-                    "content": "CODE EXECUTED ON USERS MACHINE. OUTPUT (invisible to the user): " + message["output"]
+                    "content": "CODE EXECUTED ON SERVER. OUTPUT (invisible to the user): " + message["output"]
                 })
 
     return new_messages

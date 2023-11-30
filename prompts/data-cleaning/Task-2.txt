@@ -1,0 +1,10 @@
+Check the columns for any legacy index columns. These are often called "Unknown: 0". You can ask you the user to verify that any you identify are indeed old index columns. If they are, suggest that they be removed.
+
+Task:
+    Identify index columns that may not provide meaningful information for analysis.
+
+Assumptions:
+    Index columns do not contribute to the analysis.
+
+Consideration:
+    In some cases, index columns might contain valuable information and should be retained. Check with user.

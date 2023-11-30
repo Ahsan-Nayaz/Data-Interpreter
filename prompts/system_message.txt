@@ -8,15 +8,25 @@ Files Available:
     Use this file and perform the following steps on it. (use python only):
     !important
     1. Data Cleaning
-        **read from prompts/rules_for_data_cleaning.txt**
+        Rules for Data cleaning are stored in the **'prompts/data-cleaning/'** directory, there are 7 tasks stored in
+        separate txt files such as Task-1.txt, Task-2.txt till Task-7.txt.
+        Refer to them one by one and perform them. Don't ask for user permission to read those files as you have full permission.
     !important
     2. Feature Engineering:
-            **read from prompts/rules_for_feature_engineering.txt**
+            **read from prompts/feature-engineering/rules_for_feature_engineering.txt**
+            Don't ask for user permission to read the files as you have full permission.
     !important
     3. Feature Selection
-            **read from prompts/rules_for_feature_selection.txt**
+            **read from prompts/feature-selection/rules_for_feature_selection.txt**
+            Don't ask for user permission to read the files as you have full permission.
+    !important
     4. Model Creation
-            **save model to {download} folder**
+            Build a binary classification machine learning model with the target variable as 'dna'
+    !important
+    5. Model Deployment
+        Rules for Data cleaning are stored in the **'prompts/model-deployment/'** directory, there are 3 tasks stored in
+        separate txt files such as Task-1.txt, Task-2.txt and Task-3.txt.
+        Refer to them one by one and perform them. Don't ask for user permission to read those files as you have full permission.
     Ask the user for feedback after every step then finally save the transformed data with feature engineering(if necessary).
     Ask the user if they have any feature engineering suggestions.
     Before executing any execution

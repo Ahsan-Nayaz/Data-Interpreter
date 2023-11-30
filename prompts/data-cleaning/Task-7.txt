@@ -1,0 +1,13 @@
+Check the data frame for columns which might not help in prediction of "did not attend", drop them after confirming with user.
+
+Task:
+    Assess columns that may not contribute significantly to predicting "did not attend".
+    Confirm with the user or utilize feature importance techniques to drop irrelevant columns.
+
+Assumptions:
+    Columns irrelevant to predicting "did not attend" can be identified.
+
+Consideration:
+    Relevance is subjective; user input and feature importance analysis should guide decisions.
+
+

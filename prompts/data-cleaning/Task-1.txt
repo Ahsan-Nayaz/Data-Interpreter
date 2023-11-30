@@ -1,0 +1,15 @@
+Import the libraries required for known manipulation and analysis stages, using the script provided.
+
+Task:
+    Import the libraries needed for data manipulation and analysis.
+
+Assumptions:
+    None
+
+Notes
+    pandas
+    json
+    numpy
+    sklearn
+    matplotlib
+    pgeocode
