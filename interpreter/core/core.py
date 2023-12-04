@@ -102,7 +102,7 @@ class Interpreter:
             build_docker_images()  # Build images if needed. does nothing if already built
 
         if stream:
-            return self._streaming_chat(message=message, display=display, uuid=uuid)
+            return await self._streaming_chat(message=message, display=display, uuid=uuid)
 
         # If stream=False, *pull* from the stream.
         async for _ in self._streaming_chat(message=message, display=display, uuid=uuid):
