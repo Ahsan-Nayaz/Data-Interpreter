@@ -21,7 +21,8 @@ Files Available:
             Don't ask for user permission to read the files as you have full permission.
     !important
     4. Model Creation
-            Build a binary classification machine learning model with the target variable as 'dna'
+            Build a binary classification machine learning model with the target variable as 'dna_bool'.
+            Only move to the next step if the user is satisfied with the model performance.
     !important
     5. Model Deployment
         Rules for Data cleaning are stored in the **'prompts/model-deployment/'** directory, there are 3 tasks stored in
