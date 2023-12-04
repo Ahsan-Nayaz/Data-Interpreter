@@ -7,7 +7,7 @@ import os
 import litellm
 litellm.set_verbose=True
 
-async def setup_llm(interpreter):
+def setup_llm(interpreter):
     """
     Takes an Interpreter (which includes a ton of LLM settings),
     returns a Coding LLM (a generator that streams deltas with `message` and `code`).
@@ -16,7 +16,7 @@ async def setup_llm(interpreter):
     if (not interpreter.local
         and (interpreter.model in litellm.open_ai_chat_completion_models or interpreter.model.startswith("azure/"))):
         # Function calling LLM
-        coding_llm = await setup_openai_coding_llm(interpreter)
+        coding_llm = setup_openai_coding_llm(interpreter)
     else:
         text_llm = setup_text_llm(interpreter)
         coding_llm = convert_to_coding_llm(text_llm, debug_mode=interpreter.debug_mode)

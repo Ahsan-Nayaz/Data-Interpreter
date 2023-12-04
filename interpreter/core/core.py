@@ -94,7 +94,7 @@ class Interpreter:
         config = get_config(config_path)
         self.__dict__.update(config)
 
-    async def chat(self, message: Optional[str] = None, display: bool = True, stream: bool = False, uuid=None) -> Union[
+    def chat(self, message: Optional[str] = None, display: bool = True, stream: bool = False, uuid=None) -> Union[
         List[Dict[str, Any]], None]:
 
         if self.use_containers:
@@ -102,16 +102,16 @@ class Interpreter:
             build_docker_images()  # Build images if needed. does nothing if already built
 
         if stream:
-            return await self._streaming_chat(message=message, display=display, uuid=uuid)
+            return self._streaming_chat(message=message, display=display, uuid=uuid)
 
         # If stream=False, *pull* from the stream.
-        async for _ in self._streaming_chat(message=message, display=display, uuid=uuid):
+        for _ in self._streaming_chat(message=message, display=display, uuid=uuid):
             pass
 
         return self.messages
 
 
-    async def _streaming_chat(self, message=None, display=True, uuid=None):
+    def _streaming_chat(self, message=None, display=True, uuid=None):
 
         # If we have a display,
         # we can validate our LLM settings w/ the user first
@@ -120,14 +120,14 @@ class Interpreter:
 
         # Setup the LLM
         if not self._llm:
-            self._llm = await setup_llm(self)
+            self._llm = setup_llm(self)
 
         # Sometimes a little more code -> a much better experience!
         # Display mode actually runs interpreter.chat(display=False, stream=True) from within the terminal_interface.
         # wraps the vanilla .chat(display=False) generator in a display.
         # Quite different from the plain generator stuff. So redirect to that
         if display:
-            await terminal_interface(self, message)
+            yield from terminal_interface(self, message)
             return
 
         # One-off message
@@ -135,7 +135,7 @@ class Interpreter:
             if message == "":
                 message = "No entry from user - please suggest something to enter"
             self.messages.append({"role": "user", "message": message})
-            await self._respond()
+            yield from self._respond()
 
             # Save conversation if we've turned conversation_history on
             if self.conversation_history:
