@@ -5,15 +5,15 @@ from ..utils.convert_to_openai_messages import convert_to_openai_messages
 from ..utils.display_markdown_message import display_markdown_message
 from .get_schema import get_schema
 import tokentrim as tt
+litellm.set_verbose=True
 
-
-def setup_openai_coding_llm(interpreter):
+async def setup_openai_coding_llm(interpreter):
     """
     Takes an Interpreter (which includes a ton of LLM settings),
     returns a OI Coding LLM (a generator that takes OI messages and streams deltas with `message`, `language`, and `code`).
     """
 
-    def coding_llm(messages):
+    async def coding_llm(messages):
 
         # Convert messages
         messages = convert_to_openai_messages(messages, function_calling=True)
@@ -71,7 +71,7 @@ def setup_openai_coding_llm(interpreter):
         if interpreter.debug_mode:
             print("Sending this to LiteLLM:", params)
 
-        response = litellm.completion(**params)
+        response = await litellm.acompletion(**params)
 
         accumulated_deltas = {}
         language = None

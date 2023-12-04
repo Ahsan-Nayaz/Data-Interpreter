@@ -6,6 +6,7 @@ from .setup_local_text_llm import setup_local_text_llm
 import os
 import tokentrim as tt
 import traceback
+litellm.set_verbose=True
 
 def setup_text_llm(interpreter):
     """

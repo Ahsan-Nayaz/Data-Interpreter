@@ -49,8 +49,8 @@ async def start():
     except Exception as e:
         logging.error(f"Error occurred while reading system_message.txt: {str(e)}")
 
-    llm_chain = cl.make_async(interpreter.chat)
-    cl.user_session.set("llm_chain", llm_chain)
+    # llm_chain = cl.make_async(interpreter.chat)
+    cl.user_session.set("llm_chain", interpreter)
     cl.user_session.set("unique_id", unique_id)
 
 
@@ -78,7 +78,7 @@ async def on_message(message: str):
         msg = cl.Message(content="")
         out = cl.Message(content="")
         code = cl.Message(content="", language='python')
-        for chunk in await llm_chain(message, stream=True, display=False, uuid=unique_id):
+        for chunk in await llm_chain.chat(message, stream=True, display=False, uuid=unique_id):
             logger.info(f'Processing chunk: {chunk}')
             if 'end_of_message' in chunk.keys():
                 msg = cl.Message(content="")
