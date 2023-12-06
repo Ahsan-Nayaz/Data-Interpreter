@@ -26,3 +26,4 @@ Filter-based feature selection steps:
         This will take longer than chi-squared a t-testing however, so can be skipped if you don't have much time.
         To determine the optimal number of features using MI, you should plot the features' MI scores and choose the subset above the "elbow" of the plot. Code to do this exists in the notebook.
         Choose the subset of features above the elbow and take into the next step.
+    Finally, write all the transformations you performed to a script called transform.py
