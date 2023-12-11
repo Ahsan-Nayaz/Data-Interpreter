@@ -2,4 +2,4 @@ Create a prediction.py file, rewrite if already exists.
 this will have a function called make_prediction which accepts the transformed data as input
 loads it into the model and returns the prediction.
 write only the function as it will be called upon externally.
-Save transformation.py to '/mnt/ssd/deployment'.
+Save prediction.py to '/mnt/ssd/deployment'.
