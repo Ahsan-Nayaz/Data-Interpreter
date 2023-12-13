@@ -88,11 +88,11 @@ async def on_message(message: str):
                 out = cl.Message(content="")
                 msg = cl.Message(content="")
             if 'message' in chunk.keys():
-                await msg.stream_token(token=chunk['message'])
+                await msg.stream_token(token=str(chunk['message']))
             if 'code' in chunk.keys():
-                await code.stream_token(token=chunk['code'])
+                await code.stream_token(token=str(chunk['code']))
             if 'output' in chunk.keys():
-                await out.stream_token(token=chunk["output"])
+                await out.stream_token(token=str(chunk["output"]))
             await asyncio.sleep(DELAY)
         await msg.send()
         await out.send()
